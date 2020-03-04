@@ -1,0 +1,20 @@
+<mat-card class="parecord-card">
+
+  <div class="game">{{parecord.GameName}}</div>
+  <div class="location">{{parecord.StadiumSection}}</div>
+  <div class="season">{{parecord.SportSeason}}</div>
+  <div class="stadiumlocation">{{parecord.Location}}</div>
+  <div class="date" >{{parecord.GameDate | date}}</div>
+
+  <div class="section">Sec: {{parecord.Section}}</div>
+  <div class="rownum">Row: {{parecord.Row}}</div>
+  <div class="seat">Seat: {{parecord.Seat}}</div>
+
+  <div class="scan">
+  <button mat-icon-button (click)="notImplemented('scan')" style="font-size:12px">
+    Scan
+  </button>
+  </div>
+
+
+</mat-card>

@@ -1,0 +1,11 @@
+.pa-record-container{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+}
+
+
+.card-item{
+  flex: 1;
+  padding: 3px 3px 3px 3px;
+  width:155px;
+}

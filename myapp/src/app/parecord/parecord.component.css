@@ -1,0 +1,51 @@
+.date {
+  grid-area: date;
+}
+.game{
+  grid-area: game;
+}
+.location{
+  grid-area: location;
+}
+.season{
+  grid-area: season;
+}
+.date{
+  grid-area: date;
+}
+.section{
+  grid-area: section;
+}
+.rownum{
+  grid-area: rownum;
+}
+.seat{
+  grid-area: seat;
+}
+.scan{
+  grid-area: scan;
+}
+.stadiumlocation{
+  grid-area: stadiumlocation;
+}
+
+.parecord-card {
+  font-size: 12px;
+  display: grid;
+  grid-template-columns: 50px 50px 50px;
+  grid-template-rows: 20px 20px 20px 20px 40px 40px 40px 20px;
+  grid-template-areas:
+    "game game game"
+    "location location location"
+    "season season season"
+    "stadiumlocation stadiumlocation stadiumlocation"
+    "date date date"
+
+    "section section section"
+    "rownum rownum rownum"
+    "seat seat scan";
+}
+
+
+
+
