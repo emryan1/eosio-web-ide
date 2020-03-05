@@ -1,3 +1,43 @@
 <form [formGroup]="loginForm" (ngSumbit) = "onSubmit()" class = "login-form">
 
 <mat-card class="login-card">
+
+  <mat-card-header>
+
+      <mat-card-title>Login</mat-card-title>
+
+    </mat-card-header>
+
+    <mat-card-content>
+
+
+
+
+      <p>
+        <mat-form-field appearance="legacy">
+          <mat-label>Username</mat-label>
+          <input type="text" formControlName="username" [ngClass]="{ 'is-invalid': submitted && form.username.errors }" matInput placeholder="pid">
+          <div *ngIf="submitted && form.username.errors" >
+            <mat-hint *ngIf="form.username.errors.required">Username is required</mat-hint>
+          </div>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label>Private Key</mat-label>
+          <input matInput type="password"  formControlName="privateKey" placeholder="" [ngClass]="{ 'is-invalid': submitted && form.privateKey.errors }">
+          <div *ngIf="submitted && form.privateKey.errors" class="invalid-feedback">
+            <mat-hint *ngIf="form.password.errors.required">Private Key is required</mat-hint>
+          </div>
+
+        </mat-form-field>
+      </p>
+
+
+
+    </mat-card-content>
+    <mat-card-actions>
+     <button mat-button [disabled]="loading">Login</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
