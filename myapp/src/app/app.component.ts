@@ -16,7 +16,7 @@ export class AppComponent {
 
   logout() {
     //need to call a logout function from a service we build either from eos or otherwise
-    this.router.navigate(['/login]'])
+    this.router.navigate(['/login'])
   }
 
 }
