@@ -37,7 +37,7 @@
 
     </mat-card-content>
     <mat-card-actions>
-     <button mat-button [disabled]="loading">Login</button>
+     <button mat-button (click) = "onSubmit()" [disabled]="loading">Login</button>
     </mat-card-actions>
   </mat-card>
 </form>
