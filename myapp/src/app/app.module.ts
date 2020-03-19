@@ -14,6 +14,8 @@ import {ParecordComponent} from './parecord/parecord.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { ViewTicketsComponent } from './view-tickets/view-tickets.component';
+import { BuyTicketsComponent } from './buy-tickets/buy-tickets.component';
+import { SellTicketsComponent } from './sell-tickets/sell-tickets.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { ViewTicketsComponent } from './view-tickets/view-tickets.component';
     ViewTicketsComponent,
     ParecordComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    BuyTicketsComponent,
+    SellTicketsComponent
   ],
   imports: [
     BrowserModule,
