@@ -11,7 +11,7 @@ export class AppComponent {
   title = 'myapp';
 
   constructor(private router:Router, private notif:NotificationService) {
-    //Here we will need to use the eos api that we create to get informaiton about the user
+    //Here we will need to use the eos api that we create to get information about the user
   }
 
   logout() {
