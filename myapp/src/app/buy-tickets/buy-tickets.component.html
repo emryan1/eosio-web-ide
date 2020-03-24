@@ -1,5 +1,5 @@
 <mat-tab-group mat-align-tabs="center">
-  <mat-tab label="Initial Auction">
+  <mat-tab label="Ticket Auction">
     <div class="example-container mat-elevation-z8">
     <div class="example-loading-shade"
         *ngIf="isLoadingResults">
@@ -12,45 +12,46 @@
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex: 'Miami'">
     </mat-form-field>
 
-    <table mat-table [dataSource]="dataSource" class="ticket-table">
+    <!-- start of auction table-->
+    <table mat-table [dataSource]="dataSource" class="ticket-table" matSort >
 
       <ng-container matColumnDef="GameName">
-        <th mat-header-cell *matHeaderCellDef> Game </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Game </th>
         <td mat-cell *matCellDef="let ticket"> {{ticket.GameName}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="StadiumSection">
-        <th mat-header-cell *matHeaderCellDef> Stadium Section </th>
+      <ng-container matColumnDef="StadiumSection" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Stadium Section </th>
         <td mat-cell *matCellDef="let ticket"> {{ticket.StadiumSection}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="SportSeason">
-        <th mat-header-cell *matHeaderCellDef> Sport </th>
+      <ng-container matColumnDef="SportSeason" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Sport </th>
         <td mat-cell *matCellDef="let ticket"> {{ticket.SportSeason}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="Location">
-        <th mat-header-cell *matHeaderCellDef> Location </th>
+      <ng-container matColumnDef="Location" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
         <td mat-cell *matCellDef="let ticket"> {{ticket.Location}} </td>
       </ng-container>
 
       <ng-container matColumnDef="GameDate">
-        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
         <td mat-cell *matCellDef="let ticket"> {{ticket.GameDate | date:'shortDate'}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Section">
-        <th mat-header-cell *matHeaderCellDef> Section </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Section </th>
         <td mat-cell *matCellDef="let ticket"> {{ticket.Section}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Row">
-        <th mat-header-cell *matHeaderCellDef> Row </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Row </th>
         <td mat-cell *matCellDef="let ticket"> {{ticket.Row}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Seat">
-        <th mat-header-cell *matHeaderCellDef> Seat </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Seat </th>
         <td mat-cell *matCellDef="let ticket"> {{ticket.Seat}} </td>
       </ng-container>
 
@@ -60,15 +61,8 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
 
-  </mat-tab>
-  <mat-tab label="Buy From Student">
-    <mat-list>
-      <mat-list-item>Ticket 1</mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item>Ticket 2</mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item>Ticket 3</mat-list-item>
-    </mat-list>
+    <mat-paginator [pageSizeOptions]="[25, 50, 75, 100]"></mat-paginator>
+
   </mat-tab>
   <mat-tab label="Active Bids">
     <mat-list>
