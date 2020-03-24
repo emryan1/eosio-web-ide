@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from '../_services/user.service';
+import { PARecord } from '../_models/PARecord';
 
 @Component({
   selector: 'app-buy-tickets',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BuyTicketsComponent implements OnInit {
 
-  constructor() { }
+  tickets: PARecord[] = [];
+
+  constructor(private userService:UserService) { }
 
   ngOnInit() {
+    this.userService.getActivities().subscribe(
+      tickets => {this.tickets = tickets}
+      );
   }
 
 }
