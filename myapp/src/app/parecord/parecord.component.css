@@ -30,10 +30,10 @@
 }
 
 .parecord-card {
-  font-size: 12px;
+  font-size: 18px;
   display: grid;
-  grid-template-columns: 50px 50px 50px;
-  grid-template-rows: 20px 20px 20px 20px 40px 40px 40px 20px;
+  grid-template-columns: 100px 100px 100px;
+  grid-template-rows: 40px 40px 40px 40px 80px 80px 80px 40px;
   grid-template-areas:
     "game game game"
     "location location location"
