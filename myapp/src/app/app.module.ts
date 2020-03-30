@@ -16,6 +16,7 @@ import { LoginComponent } from './login/login.component';
 import { ViewTicketsComponent } from './view-tickets/view-tickets.component';
 import { BuyTicketsComponent } from './buy-tickets/buy-tickets.component';
 import { SellTicketsComponent } from './sell-tickets/sell-tickets.component';
+import { AdminComponent } from './admin/admin.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { SellTicketsComponent } from './sell-tickets/sell-tickets.component';
     HomeComponent,
     LoginComponent,
     BuyTicketsComponent,
-    SellTicketsComponent
+    SellTicketsComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
