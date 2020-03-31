@@ -1,1 +1,18 @@
-<p>sell-tickets works!</p>
+
+  <mat-form-field>
+    <mat-label>Choose Ticket to Sell</mat-label>
+    <mat-select [(ngModel)]="selected" name="ticket">
+      <mat-option *ngFor="let ticket of ownedTickets" [value]="ticket.gameName">
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+<mat-form-field>
+  <mat-label>Initial Price</mat-label>
+  <input matInput >
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Auction Life Span (hours)</mat-label>
+  <input matInput >
+</mat-form-field>

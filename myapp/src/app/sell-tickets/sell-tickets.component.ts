@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
+import {UserService} from '../_services/user.service';
+import { PARecord } from '../_models/PARecord';
+import {MatTableDataSource} from '@angular/material/table';
+import {NotificationService} from '../_services/notification.service';
 
 @Component({
   selector: 'app-sell-tickets',
@@ -6,8 +10,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sell-tickets.component.css']
 })
 export class SellTicketsComponent implements OnInit {
+  ownedTickets: PARecord[];
+  dataSource: MatTableDataSource<PARecord>;
+  selected: String;
 
-  constructor() { }
+  constructor(private notifService:NotificationService) {
+    this.dataSource = new MatTableDataSource(this.ownedTickets);
+  }
 
   ngOnInit() {
   }

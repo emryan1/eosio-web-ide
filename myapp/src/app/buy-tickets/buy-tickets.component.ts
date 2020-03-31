@@ -4,7 +4,7 @@ import {MatSort} from '@angular/material/sort';
 import {UserService} from '../_services/user.service';
 import { PARecord } from '../_models/PARecord';
 import {MatTableDataSource} from '@angular/material/table';
-import {NotificationService} from '../_services/notification.service'
+import {NotificationService} from '../_services/notification.service';
 
 @Component({
   selector: 'app-buy-tickets',
@@ -45,7 +45,7 @@ export class BuyTicketsComponent implements OnInit {
         Seat: 18
       }];
   //Determines which coloums are shown in the table, add or remove if necessary
-  displayedColumns: string[] = ["GameName", "StadiumSection", "SportSeason", "Location", "GameDate", "Section", "Row", "Seat"]
+  displayedColumns: string[] = ["GameName", "StadiumSection", "SportSeason", "Location", "GameDate", "Section", "Row", "Seat"];
   dataSource: MatTableDataSource<PARecord>;
   isLoadingResults = false;
   resultsLength = 0;
