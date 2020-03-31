@@ -20,4 +20,5 @@ popd
 # set (deploy) compiled contract to blockchain
 cleos set contract $2 "$COMPILEDCONTRACTSPATH/$1/" --permission $2
 
-cleos push action tokenacc create '[ "hokietokacc", "1000000000.0000 HOK"]' -p tokenacc@active
+cleos push action tokenacc create '[ "hokietokacc", "1000000000 HOK"]' -p tokenacc@active
+cleos push action tokenacc issue '["hokietokacc", "10000000 HOK", "initial tokens"]' -p hokietokacc

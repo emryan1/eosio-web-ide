@@ -1,5 +1,6 @@
 #include <eosio/eosio.hpp>
 #include <eosio/system.hpp>
+#include <eosio/asset.hpp>
 
 using namespace eosio;
 
@@ -144,11 +145,15 @@ CONTRACT hokietok : public eosio::contract {
         const auto& lst = *lst_itr;
         uint64_t ticket_id = lst.ticket_id;
         const auto& ticket = tickets.get(ticket_id);
+
+        //TODO this cast is dangerous
+        auto money = asset{(int64_t)lst.price, {"HOK", 0}};
+
         action(
             permission_level{buyer, "active"_n},
             "tokenacc"_n,
             "transfer"_n,
-            std::make_tuple(buyer, ticket.owner, lst.price, std::string("test"))
+            std::make_tuple(buyer, ticket.owner, money, std::string("test"))
 
         ).send();
         tickets.modify(ticket, get_self(), [&] (auto& t) {
