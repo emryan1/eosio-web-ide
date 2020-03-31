@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NotificationService} from '../_services/notification.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { EosApiService } from '../_services/eos-api.service';
 
 @Component({
   selector: 'app-login',
@@ -15,9 +16,12 @@ export class LoginComponent implements OnInit {
   returnURL: string;
   error = '';
 
-  constructor(private router:Router, private notif:NotificationService, private formbuilder:FormBuilder, private route:ActivatedRoute) {
-    //need to redirect to home if already logged in
-    //this.router.navigate(['/']);
+  constructor(private router:Router, private notif:NotificationService, private formbuilder:FormBuilder,
+    private route:ActivatedRoute, private api:EosApiService) {
+    if (this.api.currentUserValue) {
+      this.router.navigate(['/']);
+    }
+
   }
 
 
@@ -43,11 +47,13 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    //here we need to use the eos api to contact the blockchain and validate the user
-    //for now:
-    if (this.form.username.value == "User" && this.form.privateKey.value == "123") {
-      this.router.navigate([this.returnURL]);
-    }
+    //use eos api to login
+    this.api.login(this.form.username.value, this.form.privateKey.value)
+      .then( () => {this.router.navigate([this.returnURL]);})
+      .catch(err => {
+        this.error = err;
+        this.notif.showNotif(this.error, 'undo');
+      });
 
   }
 

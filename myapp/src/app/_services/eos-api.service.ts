@@ -1,17 +1,53 @@
 import { Injectable } from '@angular/core';
 import { Api, JsonRpc } from 'eosjs';
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
+import {BehaviorSubject,  Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EosApiService {
+  private currentUserSubject: BehaviorSubject<String>;
+  public currentUser: Observable<String>;
+  private userKey: Number;
 
-  constructor() { }
+  constructor() {
+    this.currentUserSubject = new BehaviorSubject<String>(localStorage.getItem('user'));
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
+
+  public get currentUserValue(): String {
+    return this.currentUserSubject.value;
+  }
+
+  async login(username, privateKey) {
+    return new Promise((resolve, reject) => {
+      localStorage.setItem("user", username);
+      localStorage.setItem("private_ey", privateKey);
+      this.takeAction("login", {username: username})
+      .then(() => {
+          resolve();
+        })
+        .catch(err => {
+          localStorage.removeItem("user");
+          localStorage.removeItem("private_key");
+          reject(err);
+        });
+
+    });
+
+  }
+
+  logout() {
+    // remove user from local storage to log user out
+    localStorage.removeItem("user");
+    localStorage.removeItem("private_key");
+    this.currentUserSubject.next(null);
+  }
 
   async takeAction(action, dataValue) {
-    const privateKey = localStorage.getItem("cardgame_key");
-    const rpc = new JsonRpc(process.env.REACT_APP_EOS_HTTP_ENDPOINT);
+    const privateKey = localStorage.getItem("private_key");
+    const rpc = new JsonRpc("http://localhost:8888");
     const signatureProvider = new JsSignatureProvider([privateKey]);
     const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
 
@@ -19,10 +55,10 @@ export class EosApiService {
     try {
       const resultWithConfig = await api.transact({
         actions: [{
-          account: process.env.REACT_APP_EOS_CONTRACT_NAME,
+          account: "hokietok",
           name: action,
           authorization: [{
-            actor: localStorage.getItem("cardgame_account"),
+            actor: localStorage.getItem("user"),
             permission: 'active',
           }],
           data: dataValue,
