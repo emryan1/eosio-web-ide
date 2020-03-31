@@ -88,7 +88,7 @@ CONTRACT hokietok : public eosio::contract {
                 ticket.location = location;
                 ticket.date = date;
                 ticket.stadium_section = stadium_section;
-                ticker.section = section;
+                ticket.section = section;
                 ticket.row = row;
                 ticket.seat = seat;
             });
@@ -158,5 +158,3 @@ CONTRACT hokietok : public eosio::contract {
         listings.erase(lst);
     }
 };
-
-EOSIO_DISPATCH( hokietok, (mktik)(mvtik)(postlst)(rmlst)(buylst) )
