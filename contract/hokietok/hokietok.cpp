@@ -216,14 +216,14 @@ CONTRACT hokietok : public eosio::contract {
 
         //TODO this cast is dangerous
         auto curr_bid = asset{(int64_t)lst.price, {"HOK", 0}};
-
+        if (lst.highest_bidder != get_self()) {
         action(
             permission_level{bidder, "active"_n},
             "tokenacc"_n,
             "transfer"_n,
-            std::make_tuple(bidder, lst.highest_bidder, curr_bid, std::string("returning money from displaced bid"))
+            std::make_tuple(get_self(), lst.highest_bidder, curr_bid, std::string("returning money from displaced bid"))
         ).send();
-
+        }
         //TODO this cast is dangerous
         auto new_bid = asset{(int64_t)bid, {"HOK", 0}};
         action(
