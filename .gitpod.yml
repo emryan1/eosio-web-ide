@@ -13,8 +13,8 @@ ports:
   onOpen: ignore
 
 tasks:
-- before: cd webapp
-  init: yarn
-  command: nginx -c $PWD/nginx.conf; npx webpack-dev-server
+- before: cd myapp
+  init: npm install
+  command: ./node_modules/@angular/cli/bin/ng serve
 - before: cleos wallet unlock --password </password
   command: nodeos --config-dir ~/eosio/chain/config --data-dir ~/eosio/chain/data -e -p eosio --plugin eosio::chain_api_plugin --contracts-console
