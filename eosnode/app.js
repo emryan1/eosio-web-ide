@@ -7,22 +7,13 @@ const cors = require('cors');
 //Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
 const bodyParser = require('body-parser');
 
-// Our JWT logic. Uses express-jwt which is a middleware that validates JsonWebTokens and sets req.user.
-const jwt = require('./_helpers/jwt');
-
-
-// Our error handler
-const errorHandler = require('./_helpers/error-handler');
-
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use(jwt());
 
-app.use('/user', require('./routes/user.router'));
-app.use('/parecord', require('./routes/parecord.router'));
-app.use(errorHandler);
+
+app.use('/eos', require('./routes/eos.router'));
 
 
 // start server
