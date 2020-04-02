@@ -4,13 +4,17 @@ const fetch = require('node-fetch');                                    // node 
 const { TextEncoder, TextDecoder } = require('util');                   // node only; native TextEncoder/Decoder
 
 module.exports = {
-    takeAction
+    takeAction,
+    test
+}
+async function test(req,res,next) {
+  res.json("works");
 }
 
 async function takeAction(req, res, next) {
     const privateKey = req.body.privateKey;
     const signatureProvider = new JsSignatureProvider([privateKey]);
-    const rpc = new JsonRpc('http://localhost:8888', { fetch });
+    const rpc = new JsonRpc('https://8888-b0592fe3-c866-469b-bf75-f901290a5a20.ws-us02.gitpod.io', { fetch });
     const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
 
     // Main call to blockchain after setting action, account_name and data
@@ -29,9 +33,11 @@ async function takeAction(req, res, next) {
         blocksBehind: 3,
         expireSeconds: 30,
       });
+      res.json(resultWithConfig);
       return resultWithConfig;
     } catch (err) {
-      throw(err)
+      next(err);
+      throw(err);
     }
 }
   
