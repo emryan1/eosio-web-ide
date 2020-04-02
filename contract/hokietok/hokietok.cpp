@@ -216,23 +216,7 @@ CONTRACT hokietok : public eosio::contract {
 
         //TODO this cast is dangerous
         auto curr_bid = asset{(int64_t)lst.price, {"HOK", 0}};
-        if (lst.highest_bidder != get_self()) {
-        action(
-            permission_level{bidder, "active"_n},
-            "tokenacc"_n,
-            "transfer"_n,
-            std::make_tuple(get_self(), lst.highest_bidder, curr_bid, std::string("returning money from displaced bid"))
-        ).send();
-        }
-        //TODO this cast is dangerous
-        auto new_bid = asset{(int64_t)bid, {"HOK", 0}};
-        action(
-            permission_level{bidder, "active"_n},
-            "tokenacc"_n,
-            "transfer"_n,
-            std::make_tuple(bidder, get_self(), new_bid, std::string("place new bid"))
-
-        ).send();
+                
         
         auction_listings.modify(lst, get_self(), [&](auto& t) {
             t.price = bid;
@@ -249,6 +233,16 @@ CONTRACT hokietok : public eosio::contract {
         uint64_t ticket_id = lst.ticket_id;
         const auto& ticket = tickets.get(ticket_id);
 
+        auto curr_bid = asset{(int64_t)lst.price, {"HOK", 0}};
+
+        if (lst.highest_bidder != get_self()) {
+            action(
+                permission_level{lst.highest_bidder, "active"_n},
+                "tokenacc"_n,
+                "transfer"_n,
+                std::make_tuple(lst.highest_bidder, get_self(), curr_bid, std::string("collect highest bid"))
+            ).send();
+        }
         tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.owner = lst.highest_bidder;
         });
