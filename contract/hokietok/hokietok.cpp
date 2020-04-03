@@ -70,6 +70,10 @@ CONTRACT hokietok : public eosio::contract {
         //TODO reconsider scope
     }
 
+    ACTION login(name user) {
+        require_auth(user);
+    }
+
     ACTION mktik(const std::string& season, const std::string& game,
             const std::string& location, const std::string& date,
             const std::string& stadium_section, const uint16_t section,
