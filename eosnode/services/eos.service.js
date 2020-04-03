@@ -13,6 +13,7 @@ async function test(req,res,next) {
 
 async function takeAction(req, res, next) {
     const privateKey = req.body.privateKey;
+    console.log(req.body.privateKey);
     const signatureProvider = new JsSignatureProvider([privateKey]);
     const rpc = new JsonRpc('https://8888-b0592fe3-c866-469b-bf75-f901290a5a20.ws-us02.gitpod.io', { fetch });
     const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
@@ -33,7 +34,7 @@ async function takeAction(req, res, next) {
         blocksBehind: 3,
         expireSeconds: 30,
       });
-      res.json(resultWithConfig);
+      res.json(JSON.stringify(resultWithConfig, null, 2));
       return resultWithConfig;
     } catch (err) {
       next(err);
