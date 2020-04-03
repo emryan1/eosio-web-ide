@@ -11,6 +11,17 @@ async function test(req,res,next) {
   res.json("works");
 }
 
+async function getTable(tableName) {
+    const rpc = new JsonRpc('https://8888-b0592fe3-c866-469b-bf75-f901290a5a20.ws-us02.gitpod.io', { fetch });
+    rpc.get_table_rows({
+      "json": true,
+      "code": "hokietokacc",   	// contract who owns the table
+      "scope": "hokietokacc",  	// scope of the table
+      "table": tableName,		// name of the table as specified by the contract abi
+      "limit": 100,
+    }).then(result => this.setState({ ticketTable: result.rows }));
+}
+
 async function takeAction(req, res, next) {
     const privateKey = req.body.privateKey;
     const signatureProvider = new JsSignatureProvider([privateKey]);
