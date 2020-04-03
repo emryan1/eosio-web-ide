@@ -13,7 +13,6 @@ async function test(req,res,next) {
 
 async function takeAction(req, res, next) {
     const privateKey = req.body.privateKey;
-    console.log(req.body.privateKey);
     const signatureProvider = new JsSignatureProvider([privateKey]);
     const rpc = new JsonRpc('https://8888-b0592fe3-c866-469b-bf75-f901290a5a20.ws-us02.gitpod.io', { fetch });
     const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
@@ -22,11 +21,11 @@ async function takeAction(req, res, next) {
     try {
       const resultWithConfig = await api.transact({
         actions: [{
-          account: "hokietok",
+          account: "hokietokacc",
           name: req.body.action,
           authorization: [{
             actor: req.body.username,
-            permission: 'active',
+            permission: 'owner',
           }],
           data: req.body.dataValue,
         }]
@@ -37,8 +36,12 @@ async function takeAction(req, res, next) {
       res.json(JSON.stringify(resultWithConfig, null, 2));
       return resultWithConfig;
     } catch (err) {
-      next(err);
-      throw(err);
+        console.log('Caught exception' + err);
+        if (err instanceof RpcError) {
+            console.log(JSON.stringify(err.json, null, 2));
+        }
+        next(err);
+        throw(err);
     }
 }
   

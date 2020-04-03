@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
       .subscribe(data => {this.router.navigate([this.returnURL]);},
       err => {
         this.error = err;
-        this.notif.showNotif(this.error, 'undo');
+        this.notif.showNotif(this.error, 'ok');
       });
 
   }

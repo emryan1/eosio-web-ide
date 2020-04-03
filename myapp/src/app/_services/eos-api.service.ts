@@ -25,9 +25,9 @@ export class EosApiService {
 
   login(username, privateKey) {
     //change this to http request
-    return this.http.post<any>('https://3030-b0592fe3-c866-469b-bf75-f901290a5a20.ws-us02.gitpod.io/eos/take-action', {username, privateKey, action: 'login', dataValue: ""})
+    return this.http.post<any>('https://3030-b0592fe3-c866-469b-bf75-f901290a5a20.ws-us02.gitpod.io/eos/take-action', {username, privateKey, action: 'login', dataValue: {user: username}})
       .pipe(map(result => {
-        if (result) {
+        if (result.code == 200) {
           localStorage.setItem('user', username);
           localStorage.setItem('private_key', privateKey);
           this.currentUserSubject.next("user");
