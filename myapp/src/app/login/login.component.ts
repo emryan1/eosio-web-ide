@@ -18,9 +18,9 @@ export class LoginComponent implements OnInit {
 
   constructor(private router:Router, private notif:NotificationService, private formbuilder:FormBuilder,
     private route:ActivatedRoute, private api:EosApiService) {
-    console.log(this.api.currentUserValue);
+    //console.log(this.api.currentUserValue)
     if (this.api.currentUserValue) {
-      //this.router.navigate(['/']);
+      this.router.navigate(['/']);
     }
 
   }
@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit {
     this.api.login(this.form.username.value, this.form.privateKey.value)
       .subscribe(data => {this.router.navigate([this.returnURL]);},
       err => {
+        this.loading = false;
         this.error = err;
         this.notif.showNotif(this.error, 'ok');
       });

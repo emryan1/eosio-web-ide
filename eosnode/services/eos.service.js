@@ -12,7 +12,7 @@ async function test(req,res,next) {
 }
 
 async function getTable(tableName) {
-    const rpc = new JsonRpc('https://8888-b0592fe3-c866-469b-bf75-f901290a5a20.ws-us02.gitpod.io', { fetch });
+    const rpc = new JsonRpc('https://8888-cb902f7e-2692-46b1-aed3-d3ebd7157b2c.ws-us02.gitpod.io', { fetch });
     rpc.get_table_rows({
       "json": true,
       "code": "hokietokacc",   	// contract who owns the table
@@ -25,7 +25,7 @@ async function getTable(tableName) {
 async function takeAction(req, res, next) {
     const privateKey = req.body.privateKey;
     const signatureProvider = new JsSignatureProvider([privateKey]);
-    const rpc = new JsonRpc('https://8888-b0592fe3-c866-469b-bf75-f901290a5a20.ws-us02.gitpod.io', { fetch });
+    const rpc = new JsonRpc('https://8888-cb902f7e-2692-46b1-aed3-d3ebd7157b2c.ws-us02.gitpod.io', { fetch });
     const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
 
     // Main call to blockchain after setting action, account_name and data

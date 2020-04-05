@@ -16,7 +16,7 @@ export class EosApiService {
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<String>(localStorage.getItem('user'));
     this.currentUser = this.currentUserSubject.asObservable();
-    //console.log
+
   }
 
   public get currentUserValue(): String {
@@ -25,20 +25,21 @@ export class EosApiService {
 
   login(username, privateKey) {
     //change this to http request
-    return this.http.post<any>('https://3030-b0592fe3-c866-469b-bf75-f901290a5a20.ws-us02.gitpod.io/eos/take-action', {username, privateKey, action: 'login', dataValue: {user: username}})
+    return this.http.post<any>('https://3030-cb902f7e-2692-46b1-aed3-d3ebd7157b2c.ws-us02.gitpod.io/eos/take-action', {username, privateKey, action: 'login', dataValue: {user: username}})
       .pipe(map(result => {
         if (result) {
           localStorage.setItem('user', username);
           localStorage.setItem('private_key', privateKey);
-          this.currentUserSubject.next("user");
+          this.currentUserSubject.next(username);
+
         }
       }));
   }
 
   logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem("user");
-    localStorage.removeItem("private_key");
+    localStorage.removeItem('user');
+    localStorage.removeItem('private_key');
     this.currentUserSubject.next(null);
   }
 }
