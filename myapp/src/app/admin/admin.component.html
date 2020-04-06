@@ -1,15 +1,32 @@
 <mat-tab-group mat-align-tabs="center">
-  <mat-tab label="Create Ticket">
+  <mat-tab label="Create Single Ticket">
 
     <mat-card class="fields">
       <mat-form-field>
-        <mat-label>Admin Field 1</mat-label>
-        <input matInput (keyup)="temp($event)" placeholder="Placeholder">
+        <mat-label>Game</mat-label>
+        <input matInput (keyup)="setGame($event)" placeholder="Ex. Football: VT vs. Miami">
       </mat-form-field>
       <div></div>
       <mat-form-field>
-        <mat-label>Admin Field 2</mat-label>
-        <input matInput (keyup)="temp($event)" placeholder="Placeholder">
+        <mat-label>Stadium Section</mat-label>
+        <input matInput (keyup)="setStadiumSection($event)" placeholder="Ex. NORTH END ZONE">
+      </mat-form-field>
+      <div></div>
+      <mat-form-field>
+        <mat-label>Season</mat-label>
+        <input matInput (keyup)="setSeason($event)" placeholder="Ex. Football 2019">
+      </mat-form-field>
+      <div></div>
+      <mat-form-field>
+        <mat-label>Location</mat-label>
+        <input matInput (keyup)="setLocation($event)" placeholder="Ex. Lane Statium Worsham">
+      </mat-form-field>
+      <div></div>
+      <mat-form-field>
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
     </mat-card>
 
