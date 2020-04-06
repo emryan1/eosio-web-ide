@@ -17,24 +17,24 @@ export class UserService {
   constructor(private notif: NotificationService) {
 
     this.parecords = [{
-      GameName: 'Football: VT vs. Miami',
-      StadiumSection: "NORTH END ZONE",
-      SportSeason: "Football 2019",
-      Location: "Lane Statium Worsham",
-      GameDate: new Date(),
-      Section: 15,
-      Row: 22,
-      Seat: 18
+      game: 'Football: VT vs. Miami',
+      stadium_section: "NORTH END ZONE",
+      season: "Football 2019",
+      location: "Lane Statium Worsham",
+      date: new Date(),
+      section: 15,
+      row: 22,
+      seat: 18
     },
       {
-        GameName: 'Football: VT vs. Miami',
-        StadiumSection: "NORTH END ZONE",
-        SportSeason: "Football 2019",
-        Location: "Lane Statium Worsham",
-        GameDate: new Date(),
-        Section: 15,
-        Row: 22,
-        Seat: 18
+        game: 'Football: VT vs. Miami',
+        stadium_section: "NORTH END ZONE",
+        season: "Football 2019",
+        location: "Lane Statium Worsham",
+        date: new Date(),
+        section: 15,
+        row: 22,
+        seat: 18
       }];
 
   }

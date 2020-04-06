@@ -5,21 +5,19 @@ const { TextEncoder, TextDecoder } = require('util');                   // node 
 
 module.exports = {
     takeAction,
-    test
-}
-async function test(req,res,next) {
-  res.json("works");
+    getTable
 }
 
-async function getTable(tableName) {
+async function getTable(req, res, next) {
     const rpc = new JsonRpc('https://8888-cb902f7e-2692-46b1-aed3-d3ebd7157b2c.ws-us02.gitpod.io', { fetch });
-    rpc.get_table_rows({
+    const result = await rpc.get_table_rows({
       "json": true,
       "code": "hokietokacc",   	// contract who owns the table
       "scope": "hokietokacc",  	// scope of the table
-      "table": tableName,		// name of the table as specified by the contract abi
+      "table": req.query.tableName,		// name of the table as specified by the contract abi
       "limit": 100,
-    }).then(result => this.setState({ ticketTable: result.rows }));
+    }).then(result => res.json(result))
+    .catch(err => next(err));
 }
 
 async function takeAction(req, res, next) {
@@ -43,8 +41,9 @@ async function takeAction(req, res, next) {
       }, {
         blocksBehind: 3,
         expireSeconds: 30,
-      });
-      res.json(JSON.stringify(resultWithConfig, null, 2));
+      })
+      .then(result => res.json(JSON.stringify(result, null, 2)))
+      .catch(err => next(err));
       return resultWithConfig;
     } catch (err) {
         console.log('Caught exception' + err);

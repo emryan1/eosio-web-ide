@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Api, JsonRpc } from 'eosjs';
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import {BehaviorSubject,  Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import {PARecord} from '../_models/PARecord';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,18 @@ export class EosApiService {
 
   public get currentUserValue(): String {
     return this.currentUserSubject.value;
+  }
+
+  getTable(table: string){
+    const params = new HttpParams().append('tableName', table);
+    return this.http.get<any>('https://3030-cb902f7e-2692-46b1-aed3-d3ebd7157b2c.ws-us02.gitpod.io/eos/get-table', {params});
+  }
+
+  createTicket(ticket: PARecord) {
+    return this.http.post<any>('https://3030-cb902f7e-2692-46b1-aed3-d3ebd7157b2c.ws-us02.gitpod.io/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'mktik', dataValue: ticket})
+    .pipe(map(result => {
+      console.log(result);
+    }))
   }
 
   login(username, privateKey) {

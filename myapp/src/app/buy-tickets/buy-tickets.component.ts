@@ -13,37 +13,7 @@ import {NotificationService} from '../_services/notification.service';
 })
 export class BuyTicketsComponent implements OnInit {
   currBids: PARecord[];
-  tickets: PARecord[] = [{
-      GameName: 'Football: VT vs. Miami',
-      StadiumSection: "NORTH END ZONE",
-      SportSeason: "Football 2020",
-      Location: "Lane Statium Worsham",
-      GameDate: new Date(2020, 8, 4),
-      Section: 16,
-      Row: 22,
-      Seat: 18
-    },
-      {
-        GameName: 'Football: VT vs. Florida State',
-        StadiumSection: "NORTH END ZONE",
-        SportSeason: "Football 2020",
-        Location: "Lane Statium Worsham",
-        GameDate: new Date(2020, 8, 11),
-        Section: 22,
-        Row: 22,
-        Seat: 18
-      }
-    ,
-      {
-        GameName: 'Football: VT vs. Clemson',
-        StadiumSection: "NORTH END ZONE",
-        SportSeason: "Football 2020",
-        Location: "Lane Statium Worsham",
-        GameDate: new Date(2020, 8, 18),
-        Section: 24,
-        Row: 22,
-        Seat: 18
-      }];
+  tickets: PARecord[];
   //Determines which coloums are shown in the table, add or remove if necessary
   displayedColumns: string[] = ["GameName", "StadiumSection", "SportSeason", "Location", "GameDate", "Section", "Row", "Seat"];
   dataSource: MatTableDataSource<PARecord>;
