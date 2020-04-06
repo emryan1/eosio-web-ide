@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm = this.formbuilder.group({
       username:['',Validators.required],
-      privateKey:['', Validators.required]
+      privateKey:['', [Validators.required, Validators.maxLength(51), Validators.minLength(51)]]
     })
 
     this.returnURL = this.route.snapshot.queryParams['returnURL']|| '/';
@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
       err => {
         this.loading = false;
         this.error = err;
-        this.notif.showNotif(this.error, 'ok');
+        this.notif.showNotif("Incorrect username or Private Key", 'ok');
       });
 
   }

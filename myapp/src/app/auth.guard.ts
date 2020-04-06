@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
         const currentUser = this.api.currentUserValue;
         if (currentUser) {
             // check if route is admin and if its not the admin account logged in redirect
-            if (currentUser != "Hokieacc") {
+            if (currentUser != "Hokietokacc") {
                 // role not authorised so redirect to home page
                 //this.notif.showNotif('Not authorized!', 'error');
                //this.router.navigate(['/']);

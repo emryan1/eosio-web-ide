@@ -27,7 +27,9 @@
           <mat-label>Private Key</mat-label>
           <input matInput type="password"  formControlName="privateKey" placeholder="" [ngClass]="{ 'is-invalid': submitted && form.privateKey.errors }">
           <div *ngIf="submitted && form.privateKey.errors" class="invalid-feedback">
-            <mat-hint *ngIf="form.password.errors.required">Private Key is required</mat-hint>
+            <mat-hint *ngIf="form.privateKey.errors.required">Private Key is required</mat-hint>
+            <mat-hint *ngIf="form.privateKey.errors.minlength">Please enter a valid key</mat-hint>
+            <mat-hint *ngIf="form.privateKey.errors.maxlength">Please enter a valid key</mat-hint>
           </div>
 
         </mat-form-field>
