@@ -1,47 +1,54 @@
-<mat-tab-group mat-align-tabs="center">
-  <mat-tab label="Create Single Ticket">
 
     <mat-card class="fields">
       <mat-form-field>
         <mat-label>Game</mat-label>
-        <input matInput (keyup)="setGame($event)" placeholder="Ex. Football: VT vs. Miami">
+        <input matInput (keyup)="setGame($event)" placeholder="Ex. Football: VT vs. Miami" [value]="this.ticket.game">
       </mat-form-field>
       <div></div>
       <mat-form-field>
         <mat-label>Stadium Section</mat-label>
-        <input matInput (keyup)="setStadiumSection($event)" placeholder="Ex. NORTH END ZONE">
+        <input matInput (keyup)="setStadiumSection($event)" placeholder="Ex. NORTH END ZONE" [value]="this.ticket.stadium_section">
       </mat-form-field>
       <div></div>
       <mat-form-field>
         <mat-label>Season</mat-label>
-        <input matInput (keyup)="setSeason($event)" placeholder="Ex. Football 2019">
+        <input matInput (keyup)="setSeason($event)" placeholder="Ex. Football 2019" [value]="this.ticket.season">
       </mat-form-field>
       <div></div>
       <mat-form-field>
         <mat-label>Location</mat-label>
-        <input matInput (keyup)="setLocation($event)" placeholder="Ex. Lane Statium Worsham">
+        <input matInput (keyup)="setLocation($event)" placeholder="Ex. Lane Statium Worsham" [value]="this.ticket.location">
       </mat-form-field>
       <div></div>
       <mat-form-field>
         <mat-label>Date</mat-label>
-        <input matInput [matDatepicker]="picker">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-    </mat-card>
-
-  </mat-tab>
-  <mat-tab label="Other Actions">
-    <mat-card class="fields">
-      <mat-form-field>
-        <mat-label>Admin Field 1</mat-label>
-        <input matInput (keyup)="temp($event)" placeholder="Placeholder">
+        <input matInput [matDatepicker]="picker3" [value]="date.value">
+        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+        <mat-datepicker #picker3></mat-datepicker>
       </mat-form-field>
       <div></div>
       <mat-form-field>
-        <mat-label>Admin Field 2</mat-label>
-        <input matInput (keyup)="temp($event)" placeholder="Placeholder">
+        <mat-label>Section</mat-label>
+        <input matInput type="number" (keyup)="setSection($event)" placeholder="Ex. 15" [value]="this.ticket.section">
       </mat-form-field>
+      <div></div>
+      <mat-form-field>
+        <mat-label>Row</mat-label>
+        <input matInput type="number" (keyup)="setRow($event)" placeholder="Ex. 22" [value]="this.ticket.row">
+      </mat-form-field>
+      <div></div>
+      <mat-form-field>
+        <mat-label>Seat</mat-label>
+        <input matInput type="number" (keyup)="setSeat($event)" placeholder="Ex. 18" [value]="this.ticket.seat">
+      </mat-form-field>
+      <div></div>
+      <button mat-button (click)="submitSingle()">Submit One</button>
+      <div></div>
+      <mat-form-field>
+        <mat-label>Number of Records</mat-label>
+        <input matInput type="number" (keyup)="setNumber($event)" placeholder="Ex. 1" [value]="this.numTix">
+      </mat-form-field>
+      <div></div>
+      <button mat-button (click)="submitMultiple()">Submit Multiple</button>
     </mat-card>
-  </mat-tab>
-</mat-tab-group>
+
