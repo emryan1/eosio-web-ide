@@ -5,6 +5,7 @@ import {UserService} from '../_services/user.service';
 import { PARecord } from '../_models/PARecord';
 import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '../_services/notification.service';
+import {EosApiService} from '../_services/eos-api.service';
 
 @Component({
   selector: 'app-buy-tickets',
@@ -13,17 +14,18 @@ import {NotificationService} from '../_services/notification.service';
 })
 export class BuyTicketsComponent implements OnInit {
   currBids: PARecord[];
-  tickets: PARecord[];
+  auction: PARecord[];
   //Determines which coloums are shown in the table, add or remove if necessary
   displayedColumns: string[] = ["GameName", "StadiumSection", "SportSeason", "Location", "GameDate", "Section", "Row", "Seat"];
   dataSource: MatTableDataSource<PARecord>;
   isLoadingResults = false;
   resultsLength = 0;
+  checked: boolean = false;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private userService:UserService, private notifService:NotificationService) {
+  constructor(private userService:UserService, private notifService:NotificationService, private api: EosApiService) {
 
   }
 
@@ -32,7 +34,8 @@ export class BuyTicketsComponent implements OnInit {
     //this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     //Here we need to subscribe to a data stream from APIservice that will update with the tickets on the blockchain
     //and update the dataSource everytime it changes
-    this.dataSource = new MatTableDataSource(this.tickets);
+
+    this.dataSource = new MatTableDataSource(this.auction);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }

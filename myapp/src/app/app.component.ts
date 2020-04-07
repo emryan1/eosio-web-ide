@@ -11,15 +11,27 @@ import { EosApiService } from './_services/eos-api.service';
 })
 export class AppComponent {
   title = 'myapp';
+  balance: string;
+  currentUser: string;
 
   constructor(private router:Router, private notif:NotificationService, private api:EosApiService) {
     //Here we will need to use the eos api that we create to get information about the user
+    this.api.currentUserBalance.subscribe(balance => this.balance = balance);
+    this.api.currentUser.subscribe(user => this.currentUser = user);
   }
 
   logout() {
     //need to call a logout function from a service we build either from eos or otherwise
     this.api.logout();
     this.router.navigate(['/login']);
+  }
+
+  get getUser() {
+    return this.currentUser;
+  }
+
+  get getBalance() {
+    return this.balance;
   }
 
 }

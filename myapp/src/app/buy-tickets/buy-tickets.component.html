@@ -12,6 +12,8 @@
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex: 'Miami'">
     </mat-form-field>
 
+    <mat-checkbox class="checkbox" [(ngModel)]="checked">Show Active Bids Only</mat-checkbox>
+
     <!-- start of auction table-->
     <table mat-table [dataSource]="dataSource" class="ticket-table" matSort >
 
@@ -64,7 +66,7 @@
     <mat-paginator [pageSizeOptions]="[25, 50, 75, 100]"></mat-paginator>
 
   </mat-tab>
-  <mat-tab label="Active Bids">
+  <mat-tab label="Buy From Students">
     <mat-list>
       <mat-list-item>My Ticket bid 1</mat-list-item>
       <mat-divider></mat-divider>
