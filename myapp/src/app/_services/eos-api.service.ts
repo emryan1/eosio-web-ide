@@ -26,19 +26,23 @@ export class EosApiService {
 
   getTable(table: string){
     const params = new HttpParams().append('tableName', table);
-    return this.http.get<any>('https://3030-cb902f7e-2692-46b1-aed3-d3ebd7157b2c.ws-us02.gitpod.io/eos/get-table', {params});
+    return this.http.get<any>('https://3030-fc01962a-0b83-43ef-b0d6-be2a421eff86.ws-us02.gitpod.io/eos/get-table', {params});
   }
 
   createTicket(ticket: PARecord) {
-    return this.http.post<any>('https://3030-cb902f7e-2692-46b1-aed3-d3ebd7157b2c.ws-us02.gitpod.io/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'mktik', dataValue: ticket})
+    return this.http.post<any>('https://3030-fc01962a-0b83-43ef-b0d6-be2a421eff86.ws-us02.gitpod.io/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'mktik', dataValue: ticket})
     .pipe(map(result => {
       //console.log("created ticket");
     }))
   }
 
+  transferTicket(id: number, user: string) {
+    return this.http.post<any>('https://3030-fc01962a-0b83-43ef-b0d6-be2a421eff86.ws-us02.gitpod.io/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'mvtik', dataValue: {id: id, to: user}})
+  }
+
   login(username, privateKey) {
     //change this to http request
-    return this.http.post<any>('https://3030-cb902f7e-2692-46b1-aed3-d3ebd7157b2c.ws-us02.gitpod.io/eos/take-action', {username, privateKey, action: 'login', dataValue: {user: username}})
+    return this.http.post<any>('https://3030-fc01962a-0b83-43ef-b0d6-be2a421eff86.ws-us02.gitpod.io/eos/take-action', {username, privateKey, action: 'login', dataValue: {user: username}})
       .pipe(map(result => {
         if (result) {
           localStorage.setItem('user', username);

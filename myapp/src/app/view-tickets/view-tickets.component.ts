@@ -8,7 +8,7 @@ import {EosApiService} from '../_services/eos-api.service';
 styleUrls: ['view-tickets.component.css']})
 export class ViewTicketsComponent implements OnInit {
 
-  myTickets: PARecord[] = [];
+  userTickets: PARecord[] = [];
 
 
   constructor(
@@ -23,7 +23,11 @@ export class ViewTicketsComponent implements OnInit {
 
   private loadTickets() {
     this.api.getTable("tickets").subscribe(
-      tickets => {this.myTickets = tickets.rows;},
+      tickets => {tickets.rows.forEach(element => {
+        if (element.owner == this.api.currentUserValue) {
+          this.userTickets.push(element);
+        }
+      });;},
       err => {this.notifService.showNotif(err, 'error')}
     );
   }
