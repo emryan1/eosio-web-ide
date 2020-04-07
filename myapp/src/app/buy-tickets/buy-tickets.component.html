@@ -17,42 +17,42 @@
 
       <ng-container matColumnDef="GameName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Game </th>
-        <td mat-cell *matCellDef="let ticket"> {{ticket.GameName}} </td>
+        <td mat-cell *matCellDef="let ticket"> {{ticket.game}} </td>
       </ng-container>
 
       <ng-container matColumnDef="StadiumSection" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Stadium Section </th>
-        <td mat-cell *matCellDef="let ticket"> {{ticket.StadiumSection}} </td>
+        <td mat-cell *matCellDef="let ticket"> {{ticket.stadium_section}} </td>
       </ng-container>
 
       <ng-container matColumnDef="SportSeason" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Sport </th>
-        <td mat-cell *matCellDef="let ticket"> {{ticket.SportSeason}} </td>
+        <td mat-cell *matCellDef="let ticket"> {{ticket.season}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Location" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
-        <td mat-cell *matCellDef="let ticket"> {{ticket.Location}} </td>
+        <td mat-cell *matCellDef="let ticket"> {{ticket.location}} </td>
       </ng-container>
 
       <ng-container matColumnDef="GameDate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-        <td mat-cell *matCellDef="let ticket"> {{ticket.GameDate | date:'shortDate'}} </td>
+        <td mat-cell *matCellDef="let ticket"> {{ticket.date | date:'shortDate'}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Section">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Section </th>
-        <td mat-cell *matCellDef="let ticket"> {{ticket.Section}} </td>
+        <td mat-cell *matCellDef="let ticket"> {{ticket.section}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Row">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Row </th>
-        <td mat-cell *matCellDef="let ticket"> {{ticket.Row}} </td>
+        <td mat-cell *matCellDef="let ticket"> {{ticket.row}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Seat">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Seat </th>
-        <td mat-cell *matCellDef="let ticket"> {{ticket.Seat}} </td>
+        <td mat-cell *matCellDef="let ticket"> {{ticket.seat}} </td>
       </ng-container>
 
 

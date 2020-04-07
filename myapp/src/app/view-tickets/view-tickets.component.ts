@@ -8,7 +8,7 @@ import {EosApiService} from '../_services/eos-api.service';
 styleUrls: ['view-tickets.component.css']})
 export class ViewTicketsComponent implements OnInit {
 
-  parecords: PARecord[] = [];
+  myTickets: PARecord[] = [];
 
 
   constructor(
@@ -18,24 +18,14 @@ export class ViewTicketsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadAllActivities();
     this.loadTickets();
   }
 
   private loadTickets() {
     this.api.getTable("tickets").subscribe(
-      tickets => {console.log(tickets.rows)}
-    )
-  }
-
-
-
-  private loadAllActivities() {
-    this.userService.getActivities().subscribe(
-      parecords => {this.parecords = parecords;
-
-      },
-      error => {this.notifService.showNotif(error, 'error'); });
+      tickets => {this.myTickets = tickets.rows;},
+      err => {this.notifService.showNotif(err, 'error')}
+    );
   }
 
 }

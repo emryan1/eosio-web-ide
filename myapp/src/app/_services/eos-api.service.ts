@@ -32,7 +32,7 @@ export class EosApiService {
   createTicket(ticket: PARecord) {
     return this.http.post<any>('https://3030-cb902f7e-2692-46b1-aed3-d3ebd7157b2c.ws-us02.gitpod.io/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'mktik', dataValue: ticket})
     .pipe(map(result => {
-      console.log(result);
+      //console.log("created ticket");
     }))
   }
 
