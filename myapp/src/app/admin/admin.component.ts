@@ -14,6 +14,7 @@ export class AdminComponent implements OnInit {
 
   ticket: PARecord;
   numTix = 1;
+  price = 1;
   date = new FormControl(new Date())
 
   constructor(private api:EosApiService, private notif:NotificationService) { }
@@ -78,6 +79,11 @@ export class AdminComponent implements OnInit {
     this.numTix = parseInt(value);
   }
 
+  setPrice(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.price = parseInt(value);
+  }
+
   submitSingle() {
     this.notif.showNotif("Submitting", 'ok');
     this.ticket.date = this.date.value;
@@ -93,10 +99,26 @@ export class AdminComponent implements OnInit {
     let i = 0;
     for(i = 0; i < this.numTix; i++) {
       this.ticket.seat = i + 1;
-      this.api.createTicket(this.ticket).subscribe( () => {this.notif.showNotif("Submitted", 'ok');},
+      this.api.createTicket(this.ticket)
+        .subscribe(data => {
+          this.notif.showNotif("Data " + data, 'ok');
+        },
         () => {
           this.notif.showNotif("Error submitting", 'ok');
       });
     }
+  }
+
+  postAllTickets() {
+    const price = this.price;
+    this.api.getTable("tickets").subscribe(
+      tickets => {tickets.rows.forEach(element => {
+        this.api.postListing(element.id, price).subscribe(data =>
+          {this.notif.showNotif('Posted ticket ' + element.id, 'ok');}
+        ,
+          err => {this.notif.showNotif("Could not post tickets", 'error');})
+      });;},
+      err => {this.notif.showNotif("Could not get tickets", 'error')}
+    );
   }
 }

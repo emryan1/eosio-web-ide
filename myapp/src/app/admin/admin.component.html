@@ -45,10 +45,17 @@
       <button mat-button (click)="submitSingle()">Submit One</button>
       <div></div>
       <mat-form-field>
-        <mat-label>Number of Records</mat-label>
+        <mat-label>Number of Tickets to Create</mat-label>
         <input matInput type="number" (keyup)="setNumber($event)" placeholder="Ex. 1" [value]="this.numTix">
       </mat-form-field>
       <div></div>
       <button mat-button (click)="submitMultiple()">Submit Multiple</button>
+      <div></div>
+      <mat-form-field>
+        <mat-label>Base Price of Tickets</mat-label>
+        <input matInput type="number" (keyup)="setPrice($event)" placeholder="Ex. 1" [value]="this.price">
+      </mat-form-field>
+      <div></div>
+      <button mat-button (click)="postAllTickets()">Post All Tickets</button>
     </mat-card>
 
