@@ -98,7 +98,9 @@ export class AdminComponent implements OnInit {
     this.ticket.date = this.date.value;
     let i = 0;
     for(i = 0; i < this.numTix; i++) {
-      this.ticket.seat = i + 1;
+      if(this.numTix != 1){
+        this.ticket.seat = i + 1;
+      }
       this.api.createTicket(this.ticket)
         .subscribe(data => {
           this.notif.showNotif("Created ticket in seat " + this.ticket.seat, 'ok');
