@@ -15,7 +15,7 @@ export class EosApiService {
   private currentUserSubjectBalance: BehaviorSubject<string>;
   public currentUserBalance: Observable<string>;
   private userKey: Number;
-  private url = 'https://3030-a2e1e0fa-4832-47b5-8734-0f664a641899.ws-us02.gitpod.io';
+  private url = 'https://3030-ff4cac52-95ca-42fe-aa44-37c7ac1bcc6d.ws-us02.gitpod.io';
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<string>(localStorage.getItem('user'));
@@ -53,7 +53,7 @@ export class EosApiService {
   }
 
   postListing(id: number, price: number) {
-    return this.http.post<any>(this.url + '/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'postlst', dataValue: {id: id, price: price}})
+    return this.http.post<any>(this.url + '/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'postlst', dataValue: {ticket_id: id, price: price}})
   }
 
   login(username, privateKey) {

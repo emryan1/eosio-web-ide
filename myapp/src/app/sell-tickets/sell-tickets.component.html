@@ -1,15 +1,38 @@
+<form [formGroup]="sellForm" (ngSumbit) = "onSubmit()" class = "sell-form">
+<mat-card class="sell-card">
+  <mat-card-header>
+    <mat-card-title>Sell Ticket</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+
+    <mat-form-field>
+      <mat-label>Choose Ticket to Sell</mat-label>
+      <mat-select formControlName="ticket" [ngClass]="{ 'is-invalid': submitted && form.ticket.errors }">
+        <mat-option *ngFor="let ticket of ownedTickets" [value]="ticket">
+        {{ticket.game}} {{ticket.date | date:'shortDate'}} Sec:{{ticket.section}} Row:{{ticket.row}} Seat:{{ticket.seat}}
+        </mat-option>
+        <div *ngIf="submitted && form.ticket.errors" class="invalid-feedback">
+          <mat-hint *ngIf="form.ticket.errors.required">Please Choose a Ticket to Sell</mat-hint>
+        </div>
+      </mat-select>
+    </mat-form-field>
 
   <mat-form-field>
-    <mat-label>Choose Ticket to Sell</mat-label>
-    <mat-select [(ngModel)]="selected" name="ticket">
-      <mat-option *ngFor="let ticket of ownedTickets" [value]="ticket">
-      {{ticket.game}} {{ticket.date | date:'shortDate'}} Sec:{{ticket.section}} Row:{{ticket.row}} Seat:{{ticket.seat}}
-      </mat-option>
-    </mat-select>
+    <mat-label>Price</mat-label>
+    <input matInput type="text" formControlName="price" [ngClass]="{ 'is-invalid': submitted && form.price.errors }" matInput placeholder="ex. 20">
+    <div *ngIf="submitted && form.price.errors" class="invalid-feedback">
+      <mat-hint *ngIf="form.price.errors.required">A Price is required to sell ticket</mat-hint>
+      <mat-hint *ngIf="form.price.errors.min">Please enter a valid price</mat-hint>
+    </div>
   </mat-form-field>
 
-<mat-form-field>
-  <mat-label>Initial Price</mat-label>
-  <input matInput >
-</mat-form-field>
+  </mat-card-content>
+
+  <mat-card-actions>
+     <button mat-button (click) = "onSubmit()" [disabled]="loading">Post Listing</button>
+  </mat-card-actions>
+
+</mat-card>
+</form>
 
