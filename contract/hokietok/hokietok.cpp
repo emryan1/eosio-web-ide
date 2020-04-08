@@ -133,10 +133,21 @@ CONTRACT hokietok : public eosio::contract {
         const auto& ticket = *ticket_itr;
         require_auth(ticket.owner);
 
-        tickets.modify(ticket, get_self(), [&] (auto& t) {
+		check(ticket.for_sale == false, "Cannot move ticket for sale");
+		check(ticket.for_auction == false, "Cannot move ticket for auction");
+
+		tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.owner = to;
         });
     }
+
+	ACTION rmtik(const uint64_t id) {
+        require_auth(get_self());
+        auto ticket_itr = tickets.find(id);
+        check(ticket_itr != tickets.end(), "Ticket not found");
+        const auto& ticket = *ticket_itr;
+		tickets.erase(ticket);
+	}
 
     ACTION postlst(const uint64_t ticket_id, const uint64_t price) {
         auto ticket_itr = tickets.find(ticket_id);
