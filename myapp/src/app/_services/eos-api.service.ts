@@ -52,8 +52,8 @@ export class EosApiService {
     }))
   }
 
-  transferTicket(id: number, to: string) {
-    return this.http.post<any>(this.url + '/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'mvtik', dataValue: {id: id, to: to}})
+  postListing(id: number, price: number) {
+    return this.http.post<any>(this.url + '/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'postlst', dataValue: {id: id, price: price}})
   }
 
   login(username, privateKey) {
@@ -73,6 +73,7 @@ export class EosApiService {
     // remove user from local storage to log user out
     localStorage.removeItem('user');
     localStorage.removeItem('private_key');
+    localStorage.removeItem('balance')
     this.currentUserSubject.next(null);
     this.currentUserSubjectBalance.next(null);
   }

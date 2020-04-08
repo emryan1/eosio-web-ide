@@ -2,7 +2,8 @@
   <mat-form-field>
     <mat-label>Choose Ticket to Sell</mat-label>
     <mat-select [(ngModel)]="selected" name="ticket">
-      <mat-option *ngFor="let ticket of ownedTickets" [value]="ticket.gameName">
+      <mat-option *ngFor="let ticket of ownedTickets" [value]="ticket">
+      {{ticket.game}} {{ticket.date | date:'shortDate'}} Sec:{{ticket.section}} Row:{{ticket.row}} Seat:{{ticket.seat}}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -12,7 +13,3 @@
   <input matInput >
 </mat-form-field>
 
-<mat-form-field>
-  <mat-label>Auction Life Span (hours)</mat-label>
-  <input matInput >
-</mat-form-field>
