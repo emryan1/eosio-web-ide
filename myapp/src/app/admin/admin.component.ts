@@ -14,6 +14,7 @@ export class AdminComponent implements OnInit {
 
   ticket: PARecord;
   numTix = 1;
+  price = 1;
   date = new FormControl(new Date())
 
   constructor(private api:EosApiService, private notif:NotificationService) { }
@@ -78,6 +79,11 @@ export class AdminComponent implements OnInit {
     this.numTix = parseInt(value);
   }
 
+  setPrice(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.price = parseInt(value);
+  }
+
   submitSingle() {
     this.notif.showNotif("Submitting", 'ok');
     this.ticket.date = this.date.value;
@@ -92,11 +98,41 @@ export class AdminComponent implements OnInit {
     this.ticket.date = this.date.value;
     let i = 0;
     for(i = 0; i < this.numTix; i++) {
-      this.ticket.seat = i + 1;
-      this.api.createTicket(this.ticket).subscribe( () => {this.notif.showNotif("Submitted", 'ok');},
+      if(this.numTix != 1){
+        this.ticket.seat = i + 1;
+      }
+      this.api.createTicket(this.ticket)
+        .subscribe(data => {
+          this.notif.showNotif("Created ticket in seat " + this.ticket.seat, 'ok');
+        },
         () => {
           this.notif.showNotif("Error submitting", 'ok');
       });
     }
+  }
+
+  postAllTickets() {
+    const price = this.price;
+    this.api.getTable("tickets").subscribe(
+      tickets => {tickets.rows.forEach(element => {
+        this.api.postAuctListing(element.id, price).subscribe(data =>
+          {this.notif.showNotif('Posted ticket ' + element.id, 'ok');}
+        ,
+          err => {this.notif.showNotif("Could not post tickets", 'error');})
+      });;},
+      err => {this.notif.showNotif("Could not get tickets", 'error')}
+    );
+  }
+
+  endAuctionAll() {
+    this.api.getTable("auction").subscribe(
+      tickets => {tickets.rows.forEach(element => {
+        this.api.endAuctListing(element.id).subscribe(data =>
+          {this.notif.showNotif('Ended auction for ticket ' + element.id, 'ok');}
+        ,
+          err => {this.notif.showNotif("Could not end auction", 'error');})
+      });;},
+      err => {this.notif.showNotif("Could not get tickets", 'error')}
+    );
   }
 }

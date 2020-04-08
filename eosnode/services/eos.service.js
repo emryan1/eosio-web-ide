@@ -8,14 +8,17 @@ module.exports = {
     getTable,
     getBalance
 }
+
+const url = 'https://8888-dd17ef9b-32df-4357-9c4c-4d13fb63991a.ws-us02.gitpod.io'
+
 async function getBalance(req, res, next) {
-    const rpc = new JsonRpc('https://8888-a2e1e0fa-4832-47b5-8734-0f664a641899.ws-us02.gitpod.io', { fetch });
+    const rpc = new JsonRpc(url, { fetch });
     const balance = await rpc.get_currency_balance('tokenacc', req.query.username, 'HOK')
     .then(result => res.json(result))
     .catch(err => next(err));
 }
 async function getTable(req, res, next) {
-    const rpc = new JsonRpc('https://8888-a2e1e0fa-4832-47b5-8734-0f664a641899.ws-us02.gitpod.io', { fetch });
+    const rpc = new JsonRpc(url, { fetch });
     const result = await rpc.get_table_rows({
       "json": true,
       "code": "hokietokacc",   	// contract who owns the table
@@ -29,7 +32,7 @@ async function getTable(req, res, next) {
 async function takeAction(req, res, next) {
     const privateKey = req.body.privateKey;
     const signatureProvider = new JsSignatureProvider([privateKey]);
-    const rpc = new JsonRpc('https://8888-a2e1e0fa-4832-47b5-8734-0f664a641899.ws-us02.gitpod.io', { fetch });
+    const rpc = new JsonRpc(url, { fetch });
     const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
 
     // Main call to blockchain after setting action, account_name and data

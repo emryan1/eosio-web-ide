@@ -30,6 +30,11 @@ export class AppComponent {
     return this.currentUser;
   }
 
+  get isAdmin() {
+    return this.currentUser == 'hokietokacc';
+  }
+
+
   get getBalance() {
     return this.balance;
   }
