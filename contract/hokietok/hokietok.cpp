@@ -29,6 +29,9 @@ CONTRACT hokietok : public eosio::contract {
         uint16_t        row;                //row num
         uint16_t        seat;               //seat num
 
+		bool			for_sale;
+		bool			for_auction;
+
         uint64_t primary_key() const { return id; }
         uint64_t by_owner() const { return owner.value; }
     };
@@ -117,6 +120,9 @@ CONTRACT hokietok : public eosio::contract {
                 ticket.section = section;
                 ticket.row = row;
                 ticket.seat = seat;
+
+				ticket.for_sale = false;
+				ticket.for_auction = false;
             });
         }
     }
@@ -127,10 +133,21 @@ CONTRACT hokietok : public eosio::contract {
         const auto& ticket = *ticket_itr;
         require_auth(ticket.owner);
 
-        tickets.modify(ticket, get_self(), [&] (auto& t) {
+		check(ticket.for_sale == false, "Cannot move ticket for sale");
+		check(ticket.for_auction == false, "Cannot move ticket for auction");
+
+		tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.owner = to;
         });
     }
+
+	ACTION rmtik(const uint64_t id) {
+        require_auth(get_self());
+        auto ticket_itr = tickets.find(id);
+        check(ticket_itr != tickets.end(), "Ticket not found");
+        const auto& ticket = *ticket_itr;
+		tickets.erase(ticket);
+	}
 
     ACTION postlst(const uint64_t ticket_id, const uint64_t price) {
         auto ticket_itr = tickets.find(ticket_id);
@@ -139,14 +156,17 @@ CONTRACT hokietok : public eosio::contract {
 
         require_auth(ticket.owner);
 
-        // alternatively, store "for sale" status in ticket
-        auto ticket_index = listings.get_index<"ticket"_n>();
-        check(ticket_index.find(ticket_id) == ticket_index.end(), "Ticket already for sale");
+		check(ticket.for_sale == false, "Ticket already for sale");
+		check(ticket.for_auction == false, "Cannot auction and sell simultaneously");
 
         listings.emplace(get_self(), [&](auto& listing) {
             listing.id = listings.available_primary_key();
             listing.ticket_id = ticket.id;
             listing.price = price;
+        });
+
+		tickets.modify(ticket, get_self(), [&] (auto& t) {
+            t.for_sale = true;
         });
     }
 
@@ -161,6 +181,10 @@ CONTRACT hokietok : public eosio::contract {
         require_auth(ticket.owner);
 
         listings.erase(lst);
+
+		tickets.modify(ticket, get_self(), [&] (auto& t) {
+            t.for_sale = false;
+        });
     }
 
     ACTION buylst(name buyer, const uint64_t listing_id) {
@@ -174,6 +198,7 @@ CONTRACT hokietok : public eosio::contract {
         //TODO this cast is dangerous
         auto money = asset{(int64_t)lst.price, {"HOK", 0}};
 
+		//TODO check balance before transfer
         action(
             permission_level{buyer, "active"_n},
             "tokenacc"_n,
@@ -186,25 +211,30 @@ CONTRACT hokietok : public eosio::contract {
         });
         
         listings.erase(lst);
+
+		tickets.modify(ticket, get_self(), [&] (auto& t) {
+            t.for_sale = false;
+        });
     }
 
-
     ACTION postauctlst(const uint64_t ticket_id, const uint64_t price) {
+        require_auth(get_self());
         auto ticket_itr = tickets.find(ticket_id);
         check(ticket_itr != tickets.end(), "Ticket not found");
         const auto& ticket = *ticket_itr;
 
-        require_auth(get_self());
-
-        // alternatively, store "for sale" status in ticket
-        auto ticket_index = auction_listings.get_index<"ticket"_n>();
-        check(ticket_index.find(ticket_id) == ticket_index.end(), "Ticket already for sale");
+		check(ticket.for_auction == false, "Ticket already for auction");
+		check(ticket.for_sale == false, "Cannot auction and sell simultaneously");
 
         auction_listings.emplace(get_self(), [&](auto& auction) {
             auction.id = auction_listings.available_primary_key();
             auction.ticket_id = ticket.id;
             auction.price = price;
             auction.highest_bidder = get_self();
+        });
+
+		tickets.modify(ticket, get_self(), [&] (auto& t) {
+            t.for_auction = true;
         });
     }
 
@@ -228,8 +258,22 @@ CONTRACT hokietok : public eosio::contract {
         });
     }
 
+	ACTION cancelauc(const uint64_t listing_id) {
+        require_auth(get_self());
+        auto lst_itr = auction_listings.find(listing_id);
+        check(lst_itr != auction_listings.end(), "Listing not found");
+        const auto& lst = *lst_itr;
+        uint64_t ticket_id = lst.ticket_id;
+        const auto& ticket = tickets.get(ticket_id);
 
-     ACTION closeauclst(const uint64_t listing_id) {
+        auction_listings.erase(lst);
+
+		tickets.modify(ticket, get_self(), [&] (auto& t) {
+            t.for_auction = false;
+        });
+	}
+
+    ACTION closeauclst(const uint64_t listing_id) {
         require_auth(get_self());
         auto lst_itr = auction_listings.find(listing_id);
         check(lst_itr != auction_listings.end(), "Listing not found");
@@ -253,6 +297,10 @@ CONTRACT hokietok : public eosio::contract {
         
         
         auction_listings.erase(lst);
+
+		tickets.modify(ticket, get_self(), [&] (auto& t) {
+            t.for_auction = false;
+        });
     }
 
 };
