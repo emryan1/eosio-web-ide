@@ -135,4 +135,10 @@ export class AdminComponent implements OnInit {
       err => {this.notif.showNotif("Could not get tickets", 'error')}
     );
   }
+  test(){
+    this.api.getRecord("tickets", "3").subscribe(
+      tickets => {this.notif.showNotif(tickets, 'ok');},
+      err => {this.notif.showNotif("Could not get tickets", 'error');}
+    );
+  }
 }

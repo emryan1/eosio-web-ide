@@ -46,6 +46,11 @@ export class EosApiService {
     return this.http.get<any>(this.url + '/eos/get-table', {params});
   }
 
+  getRecord(table: string, id: string){
+    const params = new HttpParams().append('tableName', table).append('id', id);
+    return this.http.get<any>(this.url + '/eos/get-record', {params});
+  }
+
   createTicket(ticket: PARecord) {
     return this.http.post<any>(this.url + '/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'mktik', dataValue: ticket})
     .pipe(map(result => {

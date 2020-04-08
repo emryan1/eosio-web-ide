@@ -6,10 +6,11 @@ const { TextEncoder, TextDecoder } = require('util');                   // node 
 module.exports = {
     takeAction,
     getTable,
-    getBalance
+    getBalance,
+    getRecord
 }
 
-const url = 'https://8888-dd17ef9b-32df-4357-9c4c-4d13fb63991a.ws-us02.gitpod.io'
+const url = 'https://8888-d7830a4b-f725-446c-aade-51bee3ca5dda.ws-us02.gitpod.io'
 
 async function getBalance(req, res, next) {
     const rpc = new JsonRpc(url, { fetch });
@@ -27,6 +28,29 @@ async function getTable(req, res, next) {
       "limit": 100,
     }).then(result => res.json(result))
     .catch(err => next(err));
+}
+
+async function getRecord(req, res, next) {
+    const rpc = new JsonRpc(url, { fetch });
+    const lower_bound = req.query.id;
+    const upper_bound = (req.query.id + 1);
+
+    const result = await rpc.get_table_rows({
+      "json": true,
+      "code": "hokietokacc",   	// contract who owns the table
+      "scope": "hokietokacc",  	// scope of the table
+      "table": req.query.tableName,		// name of the table as specified by the contract abi
+      "index_position": "primary",
+      "key_type": "uint64_t",
+      "lower_bound": lower_bound,
+      "upper_bound": upper_bound,
+      "limit": 1,
+    }).then(result => {
+        res.json(result);
+    })
+    .catch(err => {
+        next(err);
+    });
 }
 
 async function takeAction(req, res, next) {
