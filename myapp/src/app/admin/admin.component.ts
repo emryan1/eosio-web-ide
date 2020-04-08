@@ -101,7 +101,7 @@ export class AdminComponent implements OnInit {
       this.ticket.seat = i + 1;
       this.api.createTicket(this.ticket)
         .subscribe(data => {
-          this.notif.showNotif("Data " + data, 'ok');
+          this.notif.showNotif("Created ticket in seat " + this.ticket.seat, 'ok');
         },
         () => {
           this.notif.showNotif("Error submitting", 'ok');
@@ -113,10 +113,22 @@ export class AdminComponent implements OnInit {
     const price = this.price;
     this.api.getTable("tickets").subscribe(
       tickets => {tickets.rows.forEach(element => {
-        this.api.postListing(element.id, price).subscribe(data =>
+        this.api.postAuctListing(element.id, price).subscribe(data =>
           {this.notif.showNotif('Posted ticket ' + element.id, 'ok');}
         ,
           err => {this.notif.showNotif("Could not post tickets", 'error');})
+      });;},
+      err => {this.notif.showNotif("Could not get tickets", 'error')}
+    );
+  }
+
+  endAuctionAll() {
+    this.api.getTable("auction").subscribe(
+      tickets => {tickets.rows.forEach(element => {
+        this.api.endAuctListing(element.id).subscribe(data =>
+          {this.notif.showNotif('Ended auction for ticket ' + element.id, 'ok');}
+        ,
+          err => {this.notif.showNotif("Could not end auction", 'error');})
       });;},
       err => {this.notif.showNotif("Could not get tickets", 'error')}
     );

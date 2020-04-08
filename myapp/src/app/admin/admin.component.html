@@ -42,20 +42,20 @@
         <input matInput type="number" (keyup)="setSeat($event)" placeholder="Ex. 18" [value]="this.ticket.seat">
       </mat-form-field>
       <div></div>
-      <button mat-button (click)="submitSingle()">Submit One</button>
-      <div></div>
       <mat-form-field>
         <mat-label>Number of Tickets to Create</mat-label>
         <input matInput type="number" (keyup)="setNumber($event)" placeholder="Ex. 1" [value]="this.numTix">
       </mat-form-field>
       <div></div>
-      <button mat-button (click)="submitMultiple()">Submit Multiple</button>
+      <button mat-button (click)="submitMultiple()">Create Ticket(s)</button>
       <div></div>
       <mat-form-field>
         <mat-label>Base Price of Tickets</mat-label>
         <input matInput type="number" (keyup)="setPrice($event)" placeholder="Ex. 1" [value]="this.price">
       </mat-form-field>
       <div></div>
-      <button mat-button (click)="postAllTickets()">Post All Tickets</button>
+      <button mat-button (click)="postAllTickets()">Put All Tickets to Auction</button>
+      <div></div>
+      <button mat-button (click)="endAuctionAll()">End All Ticket Auctions</button>
     </mat-card>
 
