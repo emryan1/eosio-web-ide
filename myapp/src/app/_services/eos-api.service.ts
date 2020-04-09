@@ -14,9 +14,8 @@ export class EosApiService {
   public currentUser: Observable<string>;
   private currentUserSubjectBalance: BehaviorSubject<string>;
   public currentUserBalance: Observable<string>;
-  private userKey: Number;
 
-  private url = 'https://3030-d7830a4b-f725-446c-aade-51bee3ca5dda.ws-us02.gitpod.io';
+  private url = 'https://3030-d90c080d-b724-475b-bc51-cc5371c98765.ws-us02.gitpod.io';
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<string>(localStorage.getItem('user'));
@@ -34,8 +33,6 @@ export class EosApiService {
     const params = new HttpParams().append('username', this.currentUserValue);
     return this.http.get<any>(this.url + '/eos/get-balance', {params})
     .pipe(map(result => {
-          console.log(result);
-          console.log("updated balance");
           localStorage.setItem('balance', result);
           this.currentUserSubjectBalance.next(result);
     }));
@@ -60,6 +57,10 @@ export class EosApiService {
 
   postListing(id: number, price: number) {
     return this.http.post<any>(this.url + '/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'postlst', dataValue: {ticket_id: id, price: price}})
+  }
+
+  buyListing(listing_id: number) {
+    return this.http.post<any>(this.url + '/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'buylst', dataValue: {buyer: this.currentUserValue, listing_id: listing_id}})
   }
 
   postAuctListing(id: number, price: number) {

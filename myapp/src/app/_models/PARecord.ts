@@ -7,5 +7,7 @@ export class PARecord {
   section: number;
   row: number;
   seat: number;
+  id: number;
+  owner: string;
 }
 

@@ -1,5 +1,4 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import {UserService} from '../_services/user.service';
 import { PARecord } from '../_models/PARecord';
 import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '../_services/notification.service';

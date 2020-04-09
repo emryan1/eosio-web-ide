@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {NotificationService} from '../_services/notification.service';
 import {PARecord} from '../_models/PARecord';
-import {UserService} from '../_services/user.service';
 import {EosApiService} from '../_services/eos-api.service';
 
 @Component({ templateUrl: 'view-tickets.component.html',
@@ -12,7 +11,6 @@ export class ViewTicketsComponent implements OnInit {
 
 
   constructor(
-    private userService: UserService,
     private notifService: NotificationService,
     private api: EosApiService
   ) {}
