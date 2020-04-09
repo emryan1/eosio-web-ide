@@ -3,11 +3,8 @@
     <ng-template mat-tab-label>
         <span (click)="clearFilters()">Ticket Auction</span>
     </ng-template>
-    <div class="example-container mat-elevation-z8">
-    <div class="example-loading-shade"
-        *ngIf="isLoadingResults">
+    <div class="example-loading-shade">
       <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-    </div>
     </div>
 
     <mat-form-field>

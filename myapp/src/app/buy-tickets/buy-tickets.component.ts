@@ -44,17 +44,18 @@ export class BuyTicketsComponent implements OnInit {
     this.loadingBuy = true;
     let listingID: number;
     this.api.getRecord("listings", id.toString()).subscribe(x => {
-      listingID = x.rows[0].ticket_id;
-    })
-    this.api.buyListing(listingID).subscribe(data =>{
-      this.loadingBuy = false;
-    },
-    err => {
-      this.loadingBuy = false;
-      this.notifService.showNotif(err);
+      listingID = x.rows[0].id;
+      console.log("listing_id:" + listingID);
+      this.api.buyListing(listingID).subscribe(data =>{
+        this.loadingBuy = false;
+      },
+      err => {
+        this.loadingBuy = false;
+        this.notifService.showNotif(err);
+      });
+      this.loadTickets();
     });
-    this.loadTickets();
-  };
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -82,11 +83,12 @@ export class BuyTicketsComponent implements OnInit {
 
   private loadTickets() {
     this.isLoadingResults = true;
-    this.api.getTable("listings").subscribe(
+    this.listing = []
+    this.api.getTable("tickets").subscribe(
       tickets => {tickets.rows.forEach(element => {
-        this.api.getRecord("tickets", element.id).subscribe(
-          x => {this.listing.push(x.rows[0])}
-        );
+        if (element.owner != this.api.currentUserValue && element.for_sale == 1) {
+          this.listing.push(element);
+        }
       });},
       err => {this.notifService.showNotif(err, 'error')}
     );
