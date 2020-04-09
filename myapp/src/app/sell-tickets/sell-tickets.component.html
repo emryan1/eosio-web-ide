@@ -24,6 +24,7 @@
     <div *ngIf="submitted && form.price.errors" class="invalid-feedback">
       <mat-hint *ngIf="form.price.errors.required">A Price is required to sell ticket</mat-hint>
       <mat-hint *ngIf="form.price.errors.min">Please enter a valid price</mat-hint>
+      <mat-hint *ngIf="form.price.errors.pattern">Please enter a valid price</mat-hint>
     </div>
   </mat-form-field>
 

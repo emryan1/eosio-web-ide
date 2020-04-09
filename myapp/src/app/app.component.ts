@@ -16,7 +16,7 @@ export class AppComponent {
 
   constructor(private router:Router, private notif:NotificationService, private api:EosApiService) {
     //Here we will need to use the eos api that we create to get information about the user
-    this.api.currentUserBalance.subscribe(balance => this.balance = balance);
+    this.api.currentUserBalance.subscribe(balance => {this.balance = balance});
     this.api.currentUser.subscribe(user => this.currentUser = user);
   }
 
@@ -26,6 +26,10 @@ export class AppComponent {
     this.router.navigate(['/login']);
   }
 
+  update() {
+    this.api.updateBalance().subscribe();
+  }
+
   get getUser() {
     return this.currentUser;
   }
@@ -33,7 +37,6 @@ export class AppComponent {
   get isAdmin() {
     return this.currentUser == 'hokietokacc';
   }
-
 
   get getBalance() {
     return this.balance;

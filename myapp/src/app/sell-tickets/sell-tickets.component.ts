@@ -27,13 +27,14 @@ export class SellTicketsComponent implements OnInit {
   ngOnInit() {
      this.sellForm = this.formbuilder.group({
       ticket:['',Validators.required],
-      price:['', [Validators.required, Validators.min(1)]]
+      price:['', [Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')]]
     })
   }
 
   get form() {return this.sellForm.controls;}
 
   private loadTickets() {
+    this.ownedTickets = [];
     this.api.getTable("tickets").subscribe(
       tickets => {tickets.rows.forEach(element => {
         if (element.owner == this.api.currentUserValue && element.for_sale == 0 && element.for_auction == 0) {
@@ -42,6 +43,7 @@ export class SellTicketsComponent implements OnInit {
       });;},
       err => {this.notifService.showNotif(err, 'error')}
     );
+
   }
 
   onSubmit() {
@@ -57,12 +59,14 @@ export class SellTicketsComponent implements OnInit {
     this.api.postListing(this.form.ticket.value.id, this.form.price.value)
       .subscribe(data => {
         this.sellForm.reset();
+        this.loadTickets();
         this.loading =  false;
         this.submitted = false;},
       err => {
         this.loading = false;
         this.notifService.showNotif(err)
       });
+
   }
 
 }

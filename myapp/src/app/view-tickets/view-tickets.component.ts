@@ -20,9 +20,10 @@ export class ViewTicketsComponent implements OnInit {
   }
 
   private loadTickets() {
+    this.userTickets = [];
     this.api.getTable("tickets").subscribe(
       tickets => {tickets.rows.forEach(element => {
-        if (element.owner == this.api.currentUserValue) {
+        if (element.owner == this.api.currentUserValue && element.for_sale == 0 && element.for_auction == 0) {
           this.userTickets.push(element);
         }
       });;},

@@ -1,14 +1,14 @@
 <mat-toolbar class="topbar" color="primary">
-  <button mat-button routerLink="/">Home</button>
-  <button mat-button routerLink="/buy-tickets">Buy Tickets</button>
-  <button mat-button routerLink="/sell-tickets">Sell Tickets</button>
-  <button mat-button routerLink="/view-tickets">View Tickets</button>
-  <button mat-button routerLink="/admin" *ngIf="isAdmin">Admin</button>
+  <button mat-button (click)="update()" routerLink="/">Home</button>
+  <button mat-button (click)="update()" routerLink="/buy-tickets">Buy Tickets</button>
+  <button mat-button (click)="update()" routerLink="/sell-tickets">Sell Tickets</button>
+  <button mat-button (click)="update()" routerLink="/view-tickets">View Tickets</button>
+  <button mat-button (click)="update()" routerLink="/admin" *ngIf="isAdmin">Admin</button>
   <button mat-button (click)="logout()"> Logout </button>
   <span class="fill-space"></span>
   <div class = "user-info">
     <h1> {{getUser}} </h1>
-    <h1> {{getBalance}} </h1>
+    <h1> {{this.balance}} </h1>
   </div>
 </mat-toolbar>
 
