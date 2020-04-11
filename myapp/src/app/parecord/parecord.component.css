@@ -3,6 +3,7 @@
 }
 .game{
   grid-area: game;
+  font-weight: bold;
 }
 .location{
   grid-area: location;
@@ -30,20 +31,32 @@
 }
 
 .parecord-card {
+  border-style: solid;
+  border-color: rgb(134, 31, 65);
+  width: 80%;
+  border-width: 8px;
   font-size: 18px;
   display: grid;
   grid-template-columns: 100px 100px 100px;
   grid-template-rows: 40px 40px 40px 40px 80px 80px 80px 40px;
   grid-template-areas:
     "game game game"
-    "location location location"
     "season season season"
     "stadiumlocation stadiumlocation stadiumlocation"
+    "location location location"
     "date date date"
 
     "section section section"
     "rownum rownum rownum"
     "seat seat seat";
+  /* The image used */
+  background-image: url("../Dist/WhiteHokieStone.PNG");
+  /* Full height */
+  height: 100%;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 

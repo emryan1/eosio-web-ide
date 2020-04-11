@@ -21,11 +21,11 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.ticket = new PARecord();
-    this.ticket.game = "Football: VT vs. Miami";
+    this.ticket.game = "VT vs. Miami";
     this.ticket.stadium_section = "NORTH END ZONE";
     this.ticket.season = "Football 2019";
-    this.ticket.location = "Lane Statium Worsham";
-    this.ticket.section = 15;
+    this.ticket.location = "Lane Stadium Worsham";
+    this.ticket.section = 210;
     this.ticket.row = 22;
     this.ticket.seat = 18;
   }
