@@ -11,7 +11,7 @@ module.exports = {
 }
 
 
-const url = 'https://8888-f6f1db29-a24d-4e3c-9d92-3018153510a3.ws-us02.gitpod.io'
+const url = 'https://8888-ac465d0e-8df3-41a0-a4f6-dc9f2700998e.ws-us02.gitpod.io'
 
 async function getBalance(req, res, next) {
     const rpc = new JsonRpc(url, { fetch });

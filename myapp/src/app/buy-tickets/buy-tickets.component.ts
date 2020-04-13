@@ -5,6 +5,8 @@ import { PARecord } from '../_models/PARecord';
 import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '../_services/notification.service';
 import {EosApiService} from '../_services/eos-api.service';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {BidComponent} from '../bid/bid.component';
 
 @Component({
   selector: 'app-buy-tickets',
@@ -17,23 +19,65 @@ export class BuyTicketsComponent implements OnInit {
   listing: PARecord[] = [];
   //Determines which coloums are shown in the table, add or remove if necessary
   displayedColumns: string[] = ["GameName", "SportSeason", "StadiumSection", "Location", "GameDate", "Section", "Row", "Seat", "Price", "Button"];
+  displayedAuctionColumns: string[] = ["GameName", "SportSeason", "StadiumSection", "Location", "GameDate", "Section", "Row", "Seat", "Price", "HighestBidder", "Button"];
   auctionDataSource: MatTableDataSource<PARecord>;
   listingDataSource: MatTableDataSource<PARecord>;
   isLoadingResults = false;
   loadingBuy = false;
+  loadingBid = false;
   resultsLength = 0;
   checked: boolean = false;
   userBalance: number;
+  spinnerColor = 'orange';
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private notifService:NotificationService, private api: EosApiService) {
+  constructor(private notifService:NotificationService, private api: EosApiService, private dialog: MatDialog) {
     this.loadTicketsBetter();
     this.api.currentUserBalance.subscribe(balance => this.userBalance = parseInt(balance));
   }
 
   ngOnInit() {}
+
+   openDialog(ticket: PARecord): void {
+    const dialogRef = this.dialog.open(BidComponent, {
+      width: '250px',
+      data: {bid: 0, ticket: ticket}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log("bid " + result + " on ticket: " + ticket.id);
+        this.bidAuction(ticket.id, result);
+      }
+    });
+  }
+
+  bidAuction(ticket_id: number, bid: number) {
+    this.loadingBid = true;
+    let auctionID: number;
+    if (this.userBalance - bid < 0) {
+      this.notifService.showNotif("You Do Not Have Enough Hokie Tokens", "OK")
+      this.loadingBid = false;
+    }
+    else {
+      this.api.getTable("auction").subscribe(table => {
+        table.rows.forEach(element => {
+          if (element.ticket_id == ticket_id) {
+            auctionID = element.id;
+          }
+        });
+        this.api.bidAuctionListing(bid, auctionID).subscribe(data => {
+          this.loadTicketsBetter();
+          this.loadingBid = false;
+        });
+      },
+      err => {
+        this.notifService.showNotif(err);
+      });
+    }
+  }
 
   buyListing(ticket_id: number) {
     console.log("bought ticket:" + ticket_id);
@@ -82,10 +126,20 @@ export class BuyTicketsComponent implements OnInit {
 
   onCheckChange(event: Event) {
     //Here we need to pull the auction table, check which tickets you bid on, and change auctionDataSource to just those tickets
-  }
-
-  bid(ticket_id: number){
-    //bid on ticket
+    let newAuction: PARecord[] = [];
+    if (this.checked) {
+      this.auction.forEach(ticket => {
+        if (ticket.highestBidder == this.api.currentUserValue) {
+          newAuction.push(ticket);
+        }
+      });
+      this.auctionDataSource = new MatTableDataSource(newAuction);
+      this.auctionDataSource.sort = this.sort;
+      this.auctionDataSource.paginator = this.paginator;
+    }
+    else {
+      this.loadTicketsBetter();
+    }
   }
 
   clearFilters() {
@@ -97,23 +151,7 @@ export class BuyTicketsComponent implements OnInit {
     if (this.listingDataSource.paginator) {
       this.listingDataSource.paginator.firstPage();
     }
-  }
-
-  getPrice(ticket_id: number): number{
-    let price: number;
-    this.api.getTable("listings").subscribe(table => {
-      table.rows.forEach(ticket => {
-        if (ticket.ticket_id == ticket_id) {
-          price = ticket.price;
-          console.log(price);
-        }
-      })
-    },
-    err => {
-        this.loadingBuy = false;
-        this.notifService.showNotif(err);
-    });
-    return price;
+    this.loadTicketsBetter();
   }
 
   //doesnt load the price, keeping this method incase I need to reference it
@@ -143,13 +181,15 @@ export class BuyTicketsComponent implements OnInit {
     console.log("loaded tickets")
   }
 
+
     //Fully loads tickets with prices, use this one
-    private loadTicketsBetter() {
+  private loadTicketsBetter() {
     this.isLoadingResults = true;
     this.listing = [];
     this.auction = [];
     this.api.getTable("tickets").subscribe(
       tickets => {
+      //Get listings
       this.api.getTable("listings").subscribe(listings => {
         tickets.rows.forEach(tix => {
           listings.rows.forEach(list => {
@@ -158,6 +198,22 @@ export class BuyTicketsComponent implements OnInit {
               if (tix.owner != this.api.currentUserValue && tix.for_sale == 1) {
                 this.listing.push(tix);
               }
+            }
+          });});
+        this.listingDataSource = new MatTableDataSource(this.listing);
+        this.listingDataSource.sort = this.sort;
+        this.listingDataSource.paginator = this.paginator;
+    },
+    err => {
+        this.notifService.showNotif(err);
+    });
+    //Get Auctions
+    this.api.getTable("auction").subscribe(auction => {
+        tickets.rows.forEach(tix => {
+          auction.rows.forEach(auc => {
+            if (auc.ticket_id == tix.id) {
+              tix.price = auc.price;
+              tix.highestBidder = auc.highest_bidder;
               if (tix.owner != this.api.currentUserValue && tix.for_auction == 1) {
                 this.auction.push(tix);
               }
@@ -166,9 +222,7 @@ export class BuyTicketsComponent implements OnInit {
         this.auctionDataSource = new MatTableDataSource(this.auction);
         this.auctionDataSource.sort = this.sort;
         this.auctionDataSource.paginator = this.paginator;
-        this.listingDataSource = new MatTableDataSource(this.listing);
-        this.listingDataSource.sort = this.sort;
-        this.listingDataSource.paginator = this.paginator;
+        this.isLoadingResults = false;
     },
     err => {
         this.notifService.showNotif(err);
@@ -176,7 +230,6 @@ export class BuyTicketsComponent implements OnInit {
       },
       err => {this.notifService.showNotif(err, 'error')}
     );
-    this.isLoadingResults = false;
     console.log("loaded tickets")
   }
 }

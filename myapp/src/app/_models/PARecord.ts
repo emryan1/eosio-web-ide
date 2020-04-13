@@ -9,5 +9,7 @@ export class PARecord {
   seat: number;
   id: number;
   owner: string;
+  price: number;
+  highestBidder: string;
 }
 

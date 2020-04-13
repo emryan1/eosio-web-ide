@@ -16,6 +16,7 @@ import { ViewTicketsComponent } from './view-tickets/view-tickets.component';
 import { BuyTicketsComponent } from './buy-tickets/buy-tickets.component';
 import { SellTicketsComponent } from './sell-tickets/sell-tickets.component';
 import { AdminComponent } from './admin/admin.component';
+import { BidComponent } from './bid/bid.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { AdminComponent } from './admin/admin.component';
     LoginComponent,
     BuyTicketsComponent,
     SellTicketsComponent,
-    AdminComponent
+    AdminComponent,
+    BidComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +41,7 @@ import { AdminComponent } from './admin/admin.component';
     HttpClientModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [BidComponent]
 })
 export class AppModule { }

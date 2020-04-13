@@ -1,0 +1,11 @@
+<div mat-dialog-content>
+  <p>Enter your bid amount </p>
+  <mat-form-field>
+    <mat-label>Bid</mat-label>
+    <input matInput [(ngModel)]="data.bid">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data.bid" cdkFocusInitial>Ok</button>
+</div>

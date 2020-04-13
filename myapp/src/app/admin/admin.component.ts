@@ -115,11 +115,13 @@ export class AdminComponent implements OnInit {
     const price = this.price;
     this.api.getTable("tickets").subscribe(
       tickets => {tickets.rows.forEach(element => {
-        this.api.postAuctListing(element.id, price).subscribe(data =>
-          {this.notif.showNotif('Posted ticket ' + element.id, 'ok');}
-        ,
-          err => {this.notif.showNotif("Could not post tickets", 'error');})
-      });;},
+        if (element.owner == "hokietokacc") {
+          this.api.postAuctListing(element.id, price).subscribe(data =>
+            {this.notif.showNotif('Posted ticket ' + element.id, 'ok');}
+          ,
+            err => {this.notif.showNotif("Could not post tickets", 'error');})
+      }});
+      },
       err => {this.notif.showNotif("Could not get tickets", 'error')}
     );
   }

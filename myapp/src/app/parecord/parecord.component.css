@@ -4,12 +4,22 @@
 .game{
   grid-area: game;
   font-weight: bold;
+  font-size: 28px;
+  border-style: solid;
+  border-color: rgb(134, 31, 65);
+  border-width: 3px;
+  background: rgb(255, 136, 45);
+  width: 235px;
+  text-align: center;
 }
 .location{
   grid-area: location;
 }
 .season{
   grid-area: season;
+  width: 235px;
+  text-align: center;
+  font-weight: bold;
 }
 .date{
   grid-area: date;
@@ -34,7 +44,7 @@
   border-style: solid;
   border-color: rgb(134, 31, 65);
   width: 80%;
-  border-width: 8px;
+  border-width: 10px;
   font-size: 18px;
   display: grid;
   grid-template-columns: 100px 100px 100px;
