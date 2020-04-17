@@ -2,6 +2,14 @@ table {
   width: 100%;
 }
 
+.counter{
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: orange;
+  line-height: 16pt;
+}
+
 .mat-form-field {
   font-size: 14px;
   width: 40%;

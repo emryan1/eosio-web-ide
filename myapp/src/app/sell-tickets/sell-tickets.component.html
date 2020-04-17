@@ -6,6 +6,7 @@
 
   <mat-card-content>
 
+    <div>
     <mat-form-field>
       <mat-label>Choose Ticket to Sell</mat-label>
       <mat-select formControlName="ticket" [ngClass]="{ 'is-invalid': submitted && form.ticket.errors }">
@@ -17,8 +18,10 @@
         </div>
       </mat-select>
     </mat-form-field>
+    </div>
 
-  <mat-form-field>
+  <div>
+  <mat-form-field class="price">
     <mat-label>Price</mat-label>
     <input matInput type="text" formControlName="price" [ngClass]="{ 'is-invalid': submitted && form.price.errors }" matInput placeholder="ex. 20">
     <div *ngIf="submitted && form.price.errors" class="invalid-feedback">
@@ -27,13 +30,20 @@
       <mat-hint *ngIf="form.price.errors.pattern">Please enter a valid price</mat-hint>
     </div>
   </mat-form-field>
+  </div>
 
   </mat-card-content>
 
   <mat-card-actions>
-     <button mat-button (click) = "onSubmit()" [disabled]="loading">Post Listing</button>
+     <button class="post-button" mat-raised-button [style.background-color] = "'rgb(134, 31, 65)'" (click) = "this.openDialog()" [disabled]="loading">Post Listing</button>
   </mat-card-actions>
 
 </mat-card>
 </form>
+
+<mat-card class="view-sell-card">
+  <mat-card-header>
+    <mat-card-title>Tickets Posted for Sale:</mat-card-title>
+  </mat-card-header>
+</mat-card>
 

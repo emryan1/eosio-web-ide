@@ -4,6 +4,8 @@ import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '../_services/notification.service';
 import {EosApiService} from '../_services/eos-api.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {ConfirmationComponent} from '../confirmation/confirmation.component';
 
 @Component({
   selector: 'app-sell-tickets',
@@ -18,7 +20,7 @@ export class SellTicketsComponent implements OnInit {
   loading = false;
   submitted = false;
 
-  constructor(private notifService:NotificationService, private api:EosApiService, private formbuilder: FormBuilder) {
+  constructor(private notifService:NotificationService, private api:EosApiService, private formbuilder: FormBuilder, private dialog: MatDialog) {
     this.loadTickets();
     this.dataSource = new MatTableDataSource(this.ownedTickets);
 
@@ -32,6 +34,22 @@ export class SellTicketsComponent implements OnInit {
   }
 
   get form() {return this.sellForm.controls;}
+
+  openDialog(): void {
+    if (this.sellForm.invalid) {
+      return;
+    }
+    const dialogRef = this.dialog.open(ConfirmationComponent, {
+      width: '250px',
+      data: {for_sale: false}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.onSubmit();
+      }
+    });
+  }
 
   private loadTickets() {
     this.ownedTickets = [];

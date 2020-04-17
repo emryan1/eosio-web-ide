@@ -7,6 +7,9 @@ import {NotificationService} from '../_services/notification.service';
 import {EosApiService} from '../_services/eos-api.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {BidComponent} from '../bid/bid.component';
+import { NgCircleProgressModule } from 'ng-circle-progress-day-countdown';
+import { Location } from "@angular/common";
+import {ConfirmationComponent} from '../confirmation/confirmation.component';
 
 @Component({
   selector: 'app-buy-tickets',
@@ -29,16 +32,42 @@ export class BuyTicketsComponent implements OnInit {
   checked: boolean = false;
   userBalance: number;
   spinnerColor = 'orange';
+  auctionMessage: string = '';
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private notifService:NotificationService, private api: EosApiService, private dialog: MatDialog) {
+  constructor(private notifService:NotificationService, private api: EosApiService, private dialog: MatDialog,
+    private location: Location) {
     this.loadTicketsBetter();
     this.api.currentUserBalance.subscribe(balance => this.userBalance = parseInt(balance));
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    //set up countdown timer
+    let endDate = this.api.auctionEndDate.getTime();
+    let x = setInterval(() => {
+      let now = new Date().getTime();
+      let distance = endDate - now;
+      // Time calculations for days, hours, minutes and seconds
+      let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      // Display the result in the element with id="countdown"
+      //if (this.location.path() == "/buy-tickets") {
+        this.auctionMessage =  "Time Left For This Auction:\n" + days + "d " + hours + "h "
+        + minutes + "m " + seconds + "s ";
+
+
+      // If the count down is finished, write some text
+        if (distance < 0) {
+          clearInterval(x);
+          this.auctionMessage = "Ticket Auction is No Longer in Progress";
+        }
+      //}
+    }, 1000);
+  }
 
    openDialog(ticket: PARecord): void {
     const dialogRef = this.dialog.open(BidComponent, {
@@ -50,6 +79,19 @@ export class BuyTicketsComponent implements OnInit {
       if (result) {
         console.log("bid " + result + " on ticket: " + ticket.id);
         this.bidAuction(ticket.id, result);
+      }
+    });
+  }
+
+  openConfirmDialog(id: number): void {
+    const dialogRef = this.dialog.open(ConfirmationComponent, {
+      width: '250px',
+      data: {for_sale: true}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.buyListing(id);
       }
     });
   }

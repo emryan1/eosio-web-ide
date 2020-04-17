@@ -14,19 +14,25 @@ export class EosApiService {
   public currentUser: Observable<string>;
   private currentUserSubjectBalance: BehaviorSubject<string>;
   public currentUserBalance: Observable<string>;
+  public endAuction: Date;
 
-  private url = 'https://3030-ac465d0e-8df3-41a0-a4f6-dc9f2700998e.ws-us02.gitpod.io';
+  private url = 'https://3030-f33c9531-2d9c-4044-9f09-f236a4bdd828.ws-us02.gitpod.io';
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<string>(localStorage.getItem('user'));
     this.currentUser = this.currentUserSubject.asObservable();
     this.currentUserSubjectBalance = new BehaviorSubject<string>(localStorage.getItem('balance'));
     this.currentUserBalance = this.currentUserSubjectBalance.asObservable();
+    this.endAuction = new Date('4/20/2020');
 
   }
 
   public get currentUserValue(): string {
     return this.currentUserSubject.value;
+  }
+
+  public get auctionEndDate() {
+    return this.endAuction;
   }
 
   updateBalance() {

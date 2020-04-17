@@ -17,6 +17,8 @@ import { BuyTicketsComponent } from './buy-tickets/buy-tickets.component';
 import { SellTicketsComponent } from './sell-tickets/sell-tickets.component';
 import { AdminComponent } from './admin/admin.component';
 import { BidComponent } from './bid/bid.component';
+import { NgCircleProgressModule } from 'ng-circle-progress-day-countdown';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
 
 
 @NgModule({
@@ -29,7 +31,8 @@ import { BidComponent } from './bid/bid.component';
     BuyTicketsComponent,
     SellTicketsComponent,
     AdminComponent,
-    BidComponent
+    BidComponent,
+    ConfirmationComponent
   ],
   imports: [
     BrowserModule,
@@ -38,10 +41,10 @@ import { BidComponent } from './bid/bid.component';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
   bootstrap: [AppComponent],
-  entryComponents: [BidComponent]
+  entryComponents: [BidComponent, ConfirmationComponent]
 })
 export class AppModule { }

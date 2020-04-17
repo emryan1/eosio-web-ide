@@ -1,10 +1,10 @@
 <mat-toolbar class="topbar" color="primary">
-  <button mat-button (click)="update()" (click)="this.homeColor = 'rgb(232, 119, 34)'" [style.background-color] = "this.homeColor" routerLink="/">Home</button>
-  <button mat-button (click)="update()" (click)="this.buyColor = 'rgb(232, 119, 34)'" [style.background-color] = "this.buyColor" routerLink="/buy-tickets">Buy Tickets</button>
-  <button mat-button (click)="update()" (click)="this.sellColor = 'rgb(232, 119, 34)'" [style.background-color] = "this.sellColor" routerLink="/sell-tickets">Sell Tickets</button>
-  <button mat-button (click)="update()" (click)="this.viewColor = 'rgb(232, 119, 34)'" [style.background-color] = "this.viewColor" routerLink="/view-tickets">View Tickets</button>
-  <button mat-button (click)="update()" (click)="this.adminColor = 'rgb(232, 119, 34)'" [style.background-color] = "this.adminColor" routerLink="/admin" *ngIf="isAdmin">Admin</button>
-  <button mat-button (click)="logout()"> Logout </button>
+  <button mat-button [disabled]="!this.currentUser" (click)="update()" (click)="this.homeColor = 'rgb(232, 119, 34)'" [style.background-color] = "this.homeColor" routerLink="/">Home</button>
+  <button mat-button [disabled]="!this.currentUser" (click)="update()" (click)="this.buyColor = 'rgb(232, 119, 34)'" [style.background-color] = "this.buyColor" routerLink="/buy-tickets">Buy Tickets</button>
+  <button mat-button [disabled]="!this.currentUser" (click)="update()" (click)="this.sellColor = 'rgb(232, 119, 34)'" [style.background-color] = "this.sellColor" routerLink="/sell-tickets">Sell Tickets</button>
+  <button mat-button [disabled]="!this.currentUser" (click)="update()" (click)="this.viewColor = 'rgb(232, 119, 34)'" [style.background-color] = "this.viewColor" routerLink="/view-tickets">View Tickets</button>
+  <button mat-button [disabled]="!this.currentUser" (click)="update()" (click)="this.adminColor = 'rgb(232, 119, 34)'" [style.background-color] = "this.adminColor" routerLink="/admin" *ngIf="isAdmin">Admin</button>
+  <button mat-button [disabled]="!this.currentUser" (click)="logout()"> Logout </button>
   <span class="fill-space"></span>
   <div class = "user-info">
     <h1> {{getUser}} </h1>

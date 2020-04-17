@@ -6,3 +6,19 @@ table {
   font-size: 14px;
   width: 40%;
 }
+
+.sell-card {
+  justify-content: center;
+  align-items: center;
+  margin: 10px 10px 10px 10px;
+}
+
+.view-sell-card {
+  justify-content: center;
+  align-items: center;
+  margin: 10px 10px 10px 10px;
+}
+
+.post-button {
+  color: white;
+}
