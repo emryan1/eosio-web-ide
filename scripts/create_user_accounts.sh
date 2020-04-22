@@ -29,5 +29,5 @@ jq -c '.[]' accounts.json | while read i; do
   cleos create account eosio $name $pub $pub
   cleos wallet import -n hokietokwal --private-key $prv
   cleos set account permission $name active '{"threshold": 1,"keys": [{"key": "EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B","weight": 1}],"accounts": [{"permission":{"actor":"hokietokacc","permission":"eosio.code"},"weight":1}]}' owner -p $name
-  cleos push action tokenacc transfer '[ "hokietokacc", "'$name'", "100 HOK", "m" ]' -p hokietokacc@active
+  cleos push action tokenacc transfer '[ "hokietokacc", "'$name'", "500 HOK", "m" ]' -p hokietokacc@active
 done
