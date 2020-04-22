@@ -43,6 +43,7 @@ export class BuyTicketsComponent implements OnInit {
     this.api.currentUserBalance.subscribe(balance => this.userBalance = parseInt(balance));
   }
 
+
   ngOnInit() {
     //set up countdown timer
     let endDate = this.api.auctionEndDate.getTime();
@@ -69,6 +70,7 @@ export class BuyTicketsComponent implements OnInit {
     }, 1000);
   }
 
+
    openDialog(ticket: PARecord): void {
     const dialogRef = this.dialog.open(BidComponent, {
       width: '250px',
@@ -83,10 +85,10 @@ export class BuyTicketsComponent implements OnInit {
     });
   }
 
-  openConfirmDialog(id: number): void {
+  openConfirmDialog(id: number, price: number): void {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
       width: '250px',
-      data: {for_sale: true}
+      data: {for_sale: true, price: price}
     });
 
     dialogRef.afterClosed().subscribe(result => {

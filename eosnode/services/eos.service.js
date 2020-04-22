@@ -2,6 +2,7 @@ const { Api, JsonRpc, RpcError } = require('eosjs');
 const { JsSignatureProvider } = require('eosjs/dist/eosjs-jssig');      // development only
 const fetch = require('node-fetch');                                    // node only; not needed in browsers
 const { TextEncoder, TextDecoder } = require('util');                   // node only; native TextEncoder/Decoder
+require('dotenv').config();
 
 module.exports = {
     takeAction,
@@ -10,8 +11,7 @@ module.exports = {
     getRecord
 }
 
-
-const url = 'https://8888-f33c9531-2d9c-4044-9f09-f236a4bdd828.ws-us02.gitpod.io';
+const url = `https://8888-${process.env.GITPOD_WORKSPACE_ID}.ws-us02.gitpod.io`;
 
 async function getBalance(req, res, next) {
     const rpc = new JsonRpc(url, { fetch });

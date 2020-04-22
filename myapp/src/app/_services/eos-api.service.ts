@@ -16,15 +16,14 @@ export class EosApiService {
   public currentUserBalance: Observable<string>;
   public endAuction: Date;
 
-  private url = 'https://3030-f33c9531-2d9c-4044-9f09-f236a4bdd828.ws-us02.gitpod.io';
+  private url = 'https://3030-ce47a709-cc4c-4b03-815a-7e7485220d30.ws-us02.gitpod.io';
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<string>(localStorage.getItem('user'));
     this.currentUser = this.currentUserSubject.asObservable();
     this.currentUserSubjectBalance = new BehaviorSubject<string>(localStorage.getItem('balance'));
     this.currentUserBalance = this.currentUserSubjectBalance.asObservable();
-    this.endAuction = new Date('4/20/2020');
-
+    this.endAuction = new Date();
   }
 
   public get currentUserValue(): string {
@@ -72,7 +71,8 @@ export class EosApiService {
     }))
   }
 
-  postAuctListing(id: number, price: number) {
+  postAuctListing(id: number, price: number, endAuction: Date) {
+    this.endAuction = new Date(endAuction);
     return this.http.post<any>(this.url + '/eos/take-action', {username: this.currentUserValue, privateKey: localStorage.getItem('private_key'), action: 'postauctlst', dataValue: {ticket_id: id, price: price}})
   }
 

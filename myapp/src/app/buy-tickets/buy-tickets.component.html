@@ -106,7 +106,7 @@
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex: 'Miami'">
     </mat-form-field>
 
-    <!-- start of auction table-->
+    <!-- start of listing table-->
     <table mat-table [dataSource]="listingDataSource" class="ticket-table" matSort >
 
       <ng-container matColumnDef="GameName">
@@ -157,7 +157,7 @@
       <ng-container matColumnDef="Button">
         <th mat-header-cell *matHeaderCellDef>  </th>
         <td mat-cell *matCellDef="let ticket">
-          <button mat-raised-button [disabled]="loadingBuy" (click) = "openConfirmDialog(ticket.id)" >Buy</button>
+          <button mat-raised-button [disabled]="loadingBuy" (click) = "openConfirmDialog(ticket.id, ticket.price)" >Buy</button>
         </td>
       </ng-container>
 

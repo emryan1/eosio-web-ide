@@ -28,6 +28,7 @@ export class AdminComponent implements OnInit {
     this.ticket.section = 210;
     this.ticket.row = 22;
     this.ticket.seat = 18;
+    this.ticket.date = new Date();
   }
 
   temp(event: Event) {
@@ -86,7 +87,6 @@ export class AdminComponent implements OnInit {
 
   submitSingle() {
     this.notif.showNotif("Submitting", 'ok');
-    this.ticket.date = this.date.value;
     this.api.createTicket(this.ticket).subscribe( () => {this.notif.showNotif("Submitted", 'ok');},
       () => {
         this.notif.showNotif("Error submitting", 'ok');
@@ -95,7 +95,6 @@ export class AdminComponent implements OnInit {
 
   submitMultiple() {
     this.notif.showNotif("Submitting", 'ok');
-    this.ticket.date = this.date.value;
     let i = 0;
     for(i = 0; i < this.numTix; i++) {
       if(this.numTix != 1){
@@ -116,7 +115,7 @@ export class AdminComponent implements OnInit {
     this.api.getTable("tickets").subscribe(
       tickets => {tickets.rows.forEach(element => {
         if (element.owner == "hokietokacc") {
-          this.api.postAuctListing(element.id, price).subscribe(data =>
+          this.api.postAuctListing(element.id, price, element.date).subscribe(data =>
             {this.notif.showNotif('Posted ticket ' + element.id, 'ok');}
           ,
             err => {this.notif.showNotif("Could not post tickets", 'error');})

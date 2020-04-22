@@ -4,6 +4,7 @@ import { PARecord } from '../_models/PARecord';
 
 export interface ConfirmData {
   for_sale: boolean;
+  price: number;
 }
 
 @Component({
@@ -17,10 +18,10 @@ export class ConfirmationComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<ConfirmationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmData) {
       if (data.for_sale) {
-        this.message = "Are you sure you would like to buy this ticket?";
+        this.message = "Are you sure you want to buy this ticket for " + data.price + " HOK?";
       }
       else {
-        this.message = "Are you sure you would like to post this ticket for sale?"
+        this.message = "Are you sure you want to post this ticket for " + data.price+ " HOK?"
       }
      }
 

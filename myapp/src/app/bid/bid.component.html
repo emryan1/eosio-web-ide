@@ -6,6 +6,6 @@
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="data.bid" cdkFocusInitial>Ok</button>
+  <button mat-button class="button" [style.background-color] = "'rgb(134, 31, 65)'" (click)="onNoClick()">Cancel</button>
+  <button mat-button class="button" [style.background-color] = "'rgb(134, 31, 65)'" [mat-dialog-close]="data.bid" cdkFocusInitial>Ok</button>
 </div>
