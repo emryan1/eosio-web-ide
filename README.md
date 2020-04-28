@@ -30,14 +30,13 @@ To preview the WebApp run this in a terminal:
 
 ```
 gp preview $(gp url 8000)
-
 ```
 
 ## logging in:
-Admin:
-user: hokietokacc
+### Admin:
+username: hokietokacc  
 private key: 5JpWT4ehouB2FF9aCfdfnZ5AwbQbTtHBAwebRXt94FmjyhXwL4K
 
-Students:
+### Students:
 Navigate to scripts/accounts.json for all of the student pids and private keys
 
