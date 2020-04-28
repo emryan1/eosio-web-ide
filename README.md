@@ -15,8 +15,7 @@ Run this in a terminal:
 ```
 gp url 3030
 ```
-Copy the output then navigate to myapp/src/app/\_services/eos-api.service.ts and replace the url variable with what you copied,
-then save the file.
+Copy the output then navigate to myapp/src/app/\_services/eos-api.service.ts and replace the url variable in the eos-api.service.ts file with the one you copied, then save the file.
 
 ## Setup the smart contracts
 Run this in a terminal:
@@ -33,4 +32,12 @@ To preview the WebApp run this in a terminal:
 gp preview $(gp url 8000)
 
 ```
+
+## logging in:
+Admin:
+user: hokietokacc
+private key: 5JpWT4ehouB2FF9aCfdfnZ5AwbQbTtHBAwebRXt94FmjyhXwL4K
+
+Students:
+Navigate to scripts/accounts.json for all of the student pids and private keys
 
