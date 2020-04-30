@@ -95,11 +95,16 @@ CONTRACT hokietok : public eosio::contract {
         require_auth(user);
     }
 
+    /**
+     * Create a new ticket (admin only)
+     */
     ACTION mktik(const std::string& season, const std::string& game,
             const std::string& location, const std::string& date,
             const std::string& stadium_section, const uint16_t section,
             const uint16_t row, const uint16_t seat) {
+        //restruct to admin
         require_auth(get_self());
+        //create the ticket
         tickets.emplace(get_self(), [&](auto& ticket) {
             ticket.id = tickets.available_primary_key();
             ticket.owner = get_self();
@@ -117,12 +122,19 @@ CONTRACT hokietok : public eosio::contract {
         });
     }
 
+    /**
+     * Transfer a ticket to another user
+     * Tickets cannot be moved while up for sale/auction
+     */
     ACTION mvtik(const uint64_t id, name to) {
+        //find ticket
         auto ticket_itr = tickets.find(id);
         check(ticket_itr != tickets.end(), "Ticket not found");
         const auto& ticket = *ticket_itr;
+        //restrict to ticket owner
         require_auth(ticket.owner);
 
+        //tickets cannot be moved while up for sale/auction
         check(ticket.for_sale == false, "Cannot move ticket for sale");
         check(ticket.for_auction == false, "Cannot move ticket for auction");
 
@@ -131,7 +143,11 @@ CONTRACT hokietok : public eosio::contract {
         });
     }
 
+    /**
+     * Destroy a ticket (admin only)
+     */
     ACTION rmtik(const uint64_t id) {
+        //restrict to admin
         require_auth(get_self());
         auto ticket_itr = tickets.find(id);
         check(ticket_itr != tickets.end(), "Ticket not found");
@@ -139,6 +155,9 @@ CONTRACT hokietok : public eosio::contract {
         tickets.erase(ticket);
     }
 
+    /**
+     * Post ticket for sale
+     */
     ACTION postlst(const uint64_t ticket_id, const uint64_t price) {
         auto ticket_itr = tickets.find(ticket_id);
         check(ticket_itr != tickets.end(), "Ticket not found");
@@ -160,6 +179,9 @@ CONTRACT hokietok : public eosio::contract {
         });
     }
 
+    /**
+     * Take down "for sale" listing
+     */
     ACTION rmlst(const uint64_t listing_id) {
         auto lst_itr = listings.find(listing_id);
         check(lst_itr != listings.end(), "Listing not found");
@@ -177,6 +199,9 @@ CONTRACT hokietok : public eosio::contract {
         });
     }
 
+    /**
+     * Buy a for sale listing
+     */
     ACTION buylst(name buyer, const uint64_t listing_id) {
         require_auth(buyer);
         auto lst_itr = listings.find(listing_id);
@@ -185,10 +210,8 @@ CONTRACT hokietok : public eosio::contract {
         uint64_t ticket_id = lst.ticket_id;
         const auto& ticket = tickets.get(ticket_id);
 
-        //TODO this cast is dangerous
         auto money = asset{(int64_t)lst.price, {"HOK", 0}};
 
-        //TODO check balance before transfer
         action(
             permission_level{buyer, "active"_n},
             "tokenacc"_n,
@@ -208,8 +231,8 @@ CONTRACT hokietok : public eosio::contract {
     }
 
     /**
-    * This action posts the ticket with given id to an auction at a minimum given price.
-    */
+     * Posts the ticket with given id to an auction at a minimum given price.
+     */
     ACTION postauctlst(const uint64_t ticket_id, const uint64_t price) {
         //Only Hokietokacc can auction a ticket
         require_auth(get_self());
@@ -239,9 +262,9 @@ CONTRACT hokietok : public eosio::contract {
     }
 
     /**
-    * This action updates the auction listing of a ticket with the information
-    * of a new bid.
-    */
+     * Updates the auction listing of a ticket with the information
+     * of a new bid.
+     */
     ACTION bidlst(name bidder, const uint64_t bid, const uint64_t auction_id) {
         //require the authentication of the bidder
         require_auth(bidder);
@@ -256,8 +279,6 @@ CONTRACT hokietok : public eosio::contract {
         //Confirm that the new bid is greater than the current bid
         check(lst.price < bid, "Insuficient Bid"); 
 
-        //IS THIS DOING ANYTHING?
-        //FIXME this cast is dangerous
         auto curr_bid = asset{(int64_t)lst.price, {"HOK", 0}};
                 
         //update the auction_listing with the new current bid and 
@@ -269,7 +290,7 @@ CONTRACT hokietok : public eosio::contract {
     }
 
     /**
-     * This action cancels an auction without selling the ticket.
+     * Cancels an auction without selling the ticket.
      */
     ACTION cancelauc(const uint64_t listing_id) {
         //Only Hokietokacc can cancel an auction
@@ -292,7 +313,7 @@ CONTRACT hokietok : public eosio::contract {
     }
 
     /**
-     * This action closes a ticket auction and completes the final transaction
+     * Closes a ticket auction and completes the final transaction
      */
     ACTION closeauclst(const uint64_t listing_id) {
         //Onlye Hokietokacc can close an auction
@@ -305,7 +326,6 @@ CONTRACT hokietok : public eosio::contract {
         uint64_t ticket_id = lst.ticket_id; //the id of the ticket in the ticket table
         const auto& ticket = tickets.get(ticket_id); //the actual ticket
 
-        //FIXME do we need this???
         auto curr_bid = asset{(int64_t)lst.price, {"HOK", 0}};
 
         //Sell the ticket if another student bid on it
