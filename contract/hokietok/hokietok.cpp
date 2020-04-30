@@ -217,15 +217,24 @@ CONTRACT hokietok : public eosio::contract {
         });
     }
 
+    /**
+    * This action posts the ticket with given id to an auction at a minimum given price.
+    */
     ACTION postauctlst(const uint64_t ticket_id, const uint64_t price) {
+        //Only Hokietokacc can auction a ticket
         require_auth(get_self());
+
+        //Find the ticket to post
         auto ticket_itr = tickets.find(ticket_id);
         check(ticket_itr != tickets.end(), "Ticket not found");
         const auto& ticket = *ticket_itr;
 
+        //Confirm that ticket is available to auction
 		check(ticket.for_auction == false, "Ticket already for auction");
 		check(ticket.for_sale == false, "Cannot auction and sell simultaneously");
 
+        //Add the ticket to the auction list and initialize
+        //the neccesary information
         auction_listings.emplace(get_self(), [&](auto& auction) {
             auction.id = auction_listings.available_primary_key();
             auction.ticket_id = ticket.id;
@@ -233,71 +242,102 @@ CONTRACT hokietok : public eosio::contract {
             auction.highest_bidder = get_self();
         });
 
+        //Set the ticket as up for auction.
 		tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.for_auction = true;
         });
     }
 
+    /**
+    * This action updates the auction listing of a ticket with the information
+    * of a new bid.
+    */
     ACTION bidlst(name bidder, const uint64_t bid, const uint64_t auction_id) {
-       require_auth(bidder);
+        //require the authentication of the bidder
+        require_auth(bidder);
+
+        //find the ticket that is being bid on
         auto lst_itr = auction_listings.find(auction_id);
         check(lst_itr != auction_listings.end(), "Listing not found");
-        const auto& lst = *lst_itr;
-        uint64_t ticket_id = lst.ticket_id;
-        const auto& ticket = tickets.get(ticket_id);
+        const auto& lst = *lst_itr; //the listing of the ticket being bit on        
+        uint64_t ticket_id = lst.ticket_id; //the ticket id
+        const auto& ticket = tickets.get(ticket_id); //the actual ticket
 
-        check(lst.price < bid, "Insuficient Bid");
+        //Confirm that the new bid is greater than the current bid
+        check(lst.price < bid, "Insuficient Bid"); 
 
-        //TODO this cast is dangerous
+        //IS THIS DOING ANYTHING?
+        //FIXME this cast is dangerous
         auto curr_bid = asset{(int64_t)lst.price, {"HOK", 0}};
                 
-        
+        //update the auction_listing with the new current bid and 
+        //highest bidder
         auction_listings.modify(lst, get_self(), [&](auto& t) {
             t.price = bid;
             t.highest_bidder = bidder;
         });
     }
 
+    /**
+     * This action cancels an auction without selling the ticket.
+     */
 	ACTION cancelauc(const uint64_t listing_id) {
+        //Only Hokietokacc can cancel an auction
         require_auth(get_self());
+
+        //Get the ticket who's auction is being canceled.
         auto lst_itr = auction_listings.find(listing_id);
         check(lst_itr != auction_listings.end(), "Listing not found");
-        const auto& lst = *lst_itr;
-        uint64_t ticket_id = lst.ticket_id;
-        const auto& ticket = tickets.get(ticket_id);
+        const auto& lst = *lst_itr; //listing of the ticket
+        uint64_t ticket_id = lst.ticket_id; //the id of the ticket in the ticket table
+        const auto& ticket = tickets.get(ticket_id); //the actual ticket
 
+        //remove the ticket from auction
         auction_listings.erase(lst);
 
+        //set the ticket as not for auction
 		tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.for_auction = false;
         });
 	}
 
+    /**
+     * This action closes a ticket auction and completes the final transaction
+     */
     ACTION closeauclst(const uint64_t listing_id) {
+        //Onlye Hokietokacc can close an auction
         require_auth(get_self());
+        
+        //Get the ticket who's auction is being closed
         auto lst_itr = auction_listings.find(listing_id);
         check(lst_itr != auction_listings.end(), "Listing not found");
-        const auto& lst = *lst_itr;
-        uint64_t ticket_id = lst.ticket_id;
-        const auto& ticket = tickets.get(ticket_id);
+        const auto& lst = *lst_itr; //the ticket's listing
+        uint64_t ticket_id = lst.ticket_id; //the id of the ticket in the ticket table
+        const auto& ticket = tickets.get(ticket_id); //the actual ticket
 
+        //FIXME do we need this???
         auto curr_bid = asset{(int64_t)lst.price, {"HOK", 0}};
 
+        //Sell the ticket if another student bid on it
         if (lst.highest_bidder != get_self()) {
             action(
+                //requires the permission of the highest bidder to transfer their bid
                 permission_level{lst.highest_bidder, "active"_n},
                 "tokenacc"_n,
                 "transfer"_n,
                 std::make_tuple(lst.highest_bidder, get_self(), curr_bid, std::string("collect highest bid"))
             ).send();
         }
+
+        //Update the owner of the ticket
         tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.owner = lst.highest_bidder;
         });
         
-        
+        //remove the ticket from the auction listing
         auction_listings.erase(lst);
 
+        //set the ticket as not for auction
 		tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.for_auction = false;
         });
