@@ -1,4 +1,10 @@
 # Hokie Tickets Blockchain Solution Webapp
+# Contents
+- `contract/hokietok`: Smart Contract
+- `eosnode`: Node backend
+- `myapp`: Website frontend
+- `scripts`: Scripts for setting up the blockchain
+
 # Setup
 1. Point your browser to the following URL https://gitpod.io/#https://github.com/emryan1/eosio-web-ide to start the IDE. 
 
