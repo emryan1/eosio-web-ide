@@ -20,7 +20,7 @@ CONTRACT hokietok : public eosio::contract {
     TABLE ticket {
         uint64_t        id;                 //unique primary key
         name            owner;              //owner of ticket
-        std::string     season;             //
+        std::string     season;             //season
         std::string     game;               //game name
         std::string     location;           //location
         std::string     date;               //date of event
@@ -29,18 +29,18 @@ CONTRACT hokietok : public eosio::contract {
         uint16_t        row;                //row num
         uint16_t        seat;               //seat num
 
-		bool			for_sale;
-		bool			for_auction;
+        bool            for_sale;
+        bool            for_auction;
 
         uint64_t primary_key() const { return id; }
         uint64_t by_owner() const { return owner.value; }
     };
 
     typedef eosio::multi_index< name("tickets"), ticket,
-            eosio::indexed_by<
-                "owner"_n, eosio::const_mem_fun<ticket, uint64_t, &ticket::by_owner>
-            >
-        > ticket_table;
+        eosio::indexed_by<
+            "owner"_n, eosio::const_mem_fun<ticket, uint64_t, &ticket::by_owner>
+        >
+    > ticket_table;
 
     ticket_table tickets;
 
@@ -53,16 +53,16 @@ CONTRACT hokietok : public eosio::contract {
         uint64_t by_ticket() const { return ticket_id; }
     };
 
-        typedef eosio::multi_index< name("listings"), listing,
-            eosio::indexed_by<
-                "ticket"_n, eosio::const_mem_fun<listing, uint64_t, &listing::by_ticket>
-            >
-        > listing_table;
+    typedef eosio::multi_index< name("listings"), listing,
+        eosio::indexed_by<
+            "ticket"_n, eosio::const_mem_fun<listing, uint64_t, &listing::by_ticket>
+        >
+    > listing_table;
 
     listing_table listings;
 
 
-        TABLE auction {
+    TABLE auction {
         uint64_t    id;         //unique primary key
         uint64_t    ticket_id;  //ticket id
         uint64_t    price;      //price in HOK tokens
@@ -72,11 +72,11 @@ CONTRACT hokietok : public eosio::contract {
         uint64_t by_ticket() const { return ticket_id; }
     };
 
-        typedef eosio::multi_index< name("auction"), auction,
-            eosio::indexed_by<
-                "ticket"_n, eosio::const_mem_fun<auction, uint64_t, &auction::by_ticket>
-            >
-        > auction_table;
+    typedef eosio::multi_index< name("auction"), auction,
+        eosio::indexed_by<
+            "ticket"_n, eosio::const_mem_fun<auction, uint64_t, &auction::by_ticket>
+        >
+    > auction_table;
 
     auction_table auction_listings;
 
@@ -89,10 +89,7 @@ CONTRACT hokietok : public eosio::contract {
                 contract( receiver, code, ds ),
                 tickets( receiver, receiver.value ),
                 listings( receiver, receiver.value ),
-                auction_listings(receiver, receiver.value)
-    {
-        //TODO reconsider scope
-    }
+                auction_listings(receiver, receiver.value) {}
 
     ACTION login(name user) {
         require_auth(user);
@@ -103,28 +100,21 @@ CONTRACT hokietok : public eosio::contract {
             const std::string& stadium_section, const uint16_t section,
             const uint16_t row, const uint16_t seat) {
         require_auth(get_self());
-        if( /* ticket for that seat/date already exists */ false)
-        {
-            //throw error
-        }
-        else
-        {
-            tickets.emplace(get_self(), [&](auto& ticket) {
-                ticket.id = tickets.available_primary_key();
-                ticket.owner = get_self();
-                ticket.season = season;
-                ticket.game = game;
-                ticket.location = location;
-                ticket.date = date;
-                ticket.stadium_section = stadium_section;
-                ticket.section = section;
-                ticket.row = row;
-                ticket.seat = seat;
+        tickets.emplace(get_self(), [&](auto& ticket) {
+            ticket.id = tickets.available_primary_key();
+            ticket.owner = get_self();
+            ticket.season = season;
+            ticket.game = game;
+            ticket.location = location;
+            ticket.date = date;
+            ticket.stadium_section = stadium_section;
+            ticket.section = section;
+            ticket.row = row;
+            ticket.seat = seat;
 
-				ticket.for_sale = false;
-				ticket.for_auction = false;
-            });
-        }
+            ticket.for_sale = false;
+            ticket.for_auction = false;
+        });
     }
 
     ACTION mvtik(const uint64_t id, name to) {
@@ -133,21 +123,21 @@ CONTRACT hokietok : public eosio::contract {
         const auto& ticket = *ticket_itr;
         require_auth(ticket.owner);
 
-		check(ticket.for_sale == false, "Cannot move ticket for sale");
-		check(ticket.for_auction == false, "Cannot move ticket for auction");
+        check(ticket.for_sale == false, "Cannot move ticket for sale");
+        check(ticket.for_auction == false, "Cannot move ticket for auction");
 
-		tickets.modify(ticket, get_self(), [&] (auto& t) {
+        tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.owner = to;
         });
     }
 
-	ACTION rmtik(const uint64_t id) {
+    ACTION rmtik(const uint64_t id) {
         require_auth(get_self());
         auto ticket_itr = tickets.find(id);
         check(ticket_itr != tickets.end(), "Ticket not found");
         const auto& ticket = *ticket_itr;
-		tickets.erase(ticket);
-	}
+        tickets.erase(ticket);
+    }
 
     ACTION postlst(const uint64_t ticket_id, const uint64_t price) {
         auto ticket_itr = tickets.find(ticket_id);
@@ -156,8 +146,8 @@ CONTRACT hokietok : public eosio::contract {
 
         require_auth(ticket.owner);
 
-		check(ticket.for_sale == false, "Ticket already for sale");
-		check(ticket.for_auction == false, "Cannot auction and sell simultaneously");
+        check(ticket.for_sale == false, "Ticket already for sale");
+        check(ticket.for_auction == false, "Cannot auction and sell simultaneously");
 
         listings.emplace(get_self(), [&](auto& listing) {
             listing.id = listings.available_primary_key();
@@ -165,7 +155,7 @@ CONTRACT hokietok : public eosio::contract {
             listing.price = price;
         });
 
-		tickets.modify(ticket, get_self(), [&] (auto& t) {
+        tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.for_sale = true;
         });
     }
@@ -182,7 +172,7 @@ CONTRACT hokietok : public eosio::contract {
 
         listings.erase(lst);
 
-		tickets.modify(ticket, get_self(), [&] (auto& t) {
+        tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.for_sale = false;
         });
     }
@@ -198,7 +188,7 @@ CONTRACT hokietok : public eosio::contract {
         //TODO this cast is dangerous
         auto money = asset{(int64_t)lst.price, {"HOK", 0}};
 
-		//TODO check balance before transfer
+        //TODO check balance before transfer
         action(
             permission_level{buyer, "active"_n},
             "tokenacc"_n,
@@ -212,7 +202,7 @@ CONTRACT hokietok : public eosio::contract {
         
         listings.erase(lst);
 
-		tickets.modify(ticket, get_self(), [&] (auto& t) {
+        tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.for_sale = false;
         });
     }
@@ -230,8 +220,8 @@ CONTRACT hokietok : public eosio::contract {
         const auto& ticket = *ticket_itr;
 
         //Confirm that ticket is available to auction
-		check(ticket.for_auction == false, "Ticket already for auction");
-		check(ticket.for_sale == false, "Cannot auction and sell simultaneously");
+        check(ticket.for_auction == false, "Ticket already for auction");
+        check(ticket.for_sale == false, "Cannot auction and sell simultaneously");
 
         //Add the ticket to the auction list and initialize
         //the neccesary information
@@ -243,7 +233,7 @@ CONTRACT hokietok : public eosio::contract {
         });
 
         //Set the ticket as up for auction.
-		tickets.modify(ticket, get_self(), [&] (auto& t) {
+        tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.for_auction = true;
         });
     }
@@ -281,7 +271,7 @@ CONTRACT hokietok : public eosio::contract {
     /**
      * This action cancels an auction without selling the ticket.
      */
-	ACTION cancelauc(const uint64_t listing_id) {
+    ACTION cancelauc(const uint64_t listing_id) {
         //Only Hokietokacc can cancel an auction
         require_auth(get_self());
 
@@ -296,10 +286,10 @@ CONTRACT hokietok : public eosio::contract {
         auction_listings.erase(lst);
 
         //set the ticket as not for auction
-		tickets.modify(ticket, get_self(), [&] (auto& t) {
+        tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.for_auction = false;
         });
-	}
+    }
 
     /**
      * This action closes a ticket auction and completes the final transaction
@@ -338,7 +328,7 @@ CONTRACT hokietok : public eosio::contract {
         auction_listings.erase(lst);
 
         //set the ticket as not for auction
-		tickets.modify(ticket, get_self(), [&] (auto& t) {
+        tickets.modify(ticket, get_self(), [&] (auto& t) {
             t.for_auction = false;
         });
     }
