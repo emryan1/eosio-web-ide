@@ -16,7 +16,7 @@ export class EosApiService {
   public currentUserBalance: Observable<string>;
   public endAuction: Date;
 
-  private url = 'https://3030-ce47a709-cc4c-4b03-815a-7e7485220d30.ws-us02.gitpod.io';
+  private url = 'https://3030-bbb57371-3734-4a24-ad97-e8622be8ae83.ws-us02.gitpod.io';
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<string>(localStorage.getItem('user'));

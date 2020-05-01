@@ -46,10 +46,10 @@ export class BuyTicketsComponent implements OnInit {
 
   ngOnInit() {
     //set up countdown timer
-    let endDate = this.api.auctionEndDate.getTime();
+    let endDate = new Date("5/8/2020");
     let x = setInterval(() => {
       let now = new Date().getTime();
-      let distance = endDate - now;
+      let distance = endDate.getTime() - now;
       // Time calculations for days, hours, minutes and seconds
       let days = Math.floor(distance / (1000 * 60 * 60 * 24));
       let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
